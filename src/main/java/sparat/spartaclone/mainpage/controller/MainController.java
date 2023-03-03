@@ -1,5 +1,6 @@
 package sparat.spartaclone.mainpage.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,8 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class MainController {
-    @PostMapping("/main")
+    @GetMapping("/main")
+    @Operation(summary = "메인 페이지", description ="?sort=[new || like || me]&keyword=test" )
     public ApiResponse<UserResponseDto> getList(MainPageRequestDto mainPageRequestDto) {
         return ApiResponse.successOf(HttpStatus.CREATED, null);
     }
