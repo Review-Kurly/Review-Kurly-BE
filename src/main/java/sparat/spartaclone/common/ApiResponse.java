@@ -27,10 +27,10 @@ public class ApiResponse<T> {
         }
     }
 
-    @Schema(type = "integer", example = "200")
+    @Schema(type = "integer", example = "200", description = "HTTP status code")
     private int code;
 
-    @Schema(type = "string", example = "success")
+    @Schema(type = "string", example = "success", description = "\"success\" 또는 \"fail\" 로만 옴")
     private MessageType message;
 
     private T data;

@@ -17,6 +17,9 @@ public class UserResponseDto {
     @Schema(example = "username")
     private String username;
 
+    @Schema(example = "apple123")
+    private String nickname;
+
     @Schema(example = "user@gmail.com")
     private String email;
 
