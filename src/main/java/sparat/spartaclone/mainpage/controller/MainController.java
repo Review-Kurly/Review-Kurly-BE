@@ -18,7 +18,7 @@ import javax.validation.Valid;
 public class MainController {
     @GetMapping("/main")
     @Operation(summary = "메인 페이지", description ="?sort=[new || like || me]&keyword=test" )
-    public ApiResponse<UserResponseDto> getList(MainPageRequestDto mainPageRequestDto) {
+    public ApiResponse<MainPageResponseDto> getList(MainPageRequestDto mainPageRequestDto) {
         return ApiResponse.successOf(HttpStatus.CREATED, null);
     }
 
