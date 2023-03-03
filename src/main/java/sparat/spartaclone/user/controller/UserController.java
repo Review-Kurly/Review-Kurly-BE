@@ -25,7 +25,7 @@ public class UserController {
 //    private final UserService userService;
 
     @PostMapping("/signup")
-    @Operation(summary = "회원 가입")
+    @Operation(summary = "회원 가입", description = "username은 영문숫자 조합 4자 이상, 10자 이하\n password은 영문숫자 조합 8자 이상, 15자 이하\n, nickname은 아무 문자 4자 이상 20자 이하")
     public ApiResponse<UserResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
 //        return ApiResponse.successOf(HttpStatus.CREATED, userService.signup(signupRequestDto));
         return ApiResponse.successOf(HttpStatus.CREATED, null);
