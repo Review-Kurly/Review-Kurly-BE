@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Tag(name = "Review")
 @RestController
-@RequestMapping("/api/review")
+@RequestMapping("/api/reviews-details")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -29,13 +29,13 @@ public class ReviewController {
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
 
-    @GetMapping("/{reviewId}")
+    @GetMapping("/{reviewsId}")
     @Operation(summary = "리뷰 상세페이지 조회", description = "리뷰 상세페이지 댓글 목록까지 조회 ")
     public ApiResponse<ReviewsDetailsResponseDto> getReview(@PathVariable Long reviewId){
         return ApiResponse.successOf(HttpStatus.OK,null);
     }
 
-    @PutMapping("/{reviewId}")
+    @PutMapping("/{reviewsId}")
     @Operation(summary = "리뷰 상세페이지 수정", description = "리뷰 상세페이지 수정 ")
     public ApiResponse<ReviewsDetailsResponseDto> putReview(@PathVariable Long reviewId,
                                                           @RequestBody ReviewRequestDto requestDto,
@@ -44,13 +44,13 @@ public class ReviewController {
 
     }
 
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/{reviewsId}")
     @Operation(summary = "리뷰 상세페이지 삭제", description = "리뷰 상세페이지 댓글 목록까지 삭제 ")
     public ApiResponse<ReviewsDetailsResponseDto> deleteReview(@PathVariable Long reviewId, HttpServletResponse response){
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
 
-    @PostMapping("/likes/{reviewId}")
+    @PostMapping("/likes/{reviewsId}")
     @Operation(summary = "좋아요 등록", description = "좋아요 등록 ")
     public ApiResponse<ReviewsDetailsLikesResponseDto> toggleLikes(@PathVariable Long reviewId, HttpServletResponse response){
         return ApiResponse.successOf(HttpStatus.OK,null);
