@@ -1,4 +1,4 @@
-package sparat.spartaclone.review.entity;
+package sparat.spartaclone.common.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
