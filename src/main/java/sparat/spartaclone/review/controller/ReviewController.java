@@ -1,4 +1,4 @@
 package sparat.spartaclone.review.controller;
 
-public class ReviewController {
+public class ReviewController {//test
 }
