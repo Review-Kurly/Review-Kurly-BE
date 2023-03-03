@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiResponse<UserResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        //        return ApiResponse.successOf(HttpStatus.CREATED, userService.login(signupRequestDto));
+//        return ApiResponse.successOf(HttpStatus.CREATED, userService.login(signupRequestDto));
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
 }
