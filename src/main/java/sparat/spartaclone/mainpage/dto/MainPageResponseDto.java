@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class MainPageResponseDto {
     private Long id;
     private String title;
+    private String imageUrl;
     private Long price;
     private Long likeCount;
 }

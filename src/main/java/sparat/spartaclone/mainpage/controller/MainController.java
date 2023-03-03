@@ -1,6 +1,7 @@
 package sparat.spartaclone.mainpage.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import sparat.spartaclone.user.dto.UserResponseDto;
 
 import javax.validation.Valid;
 
+@Tag(name = "MainPage")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
