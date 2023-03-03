@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ReviewDetailResponseDto {
+public class ReviewsDetailsResponseDto {
 
     private String imageUrl; // 이미지 등록
 
@@ -20,4 +20,5 @@ public class ReviewDetailResponseDto {
     private String userReview; // 리뷰 등록
 
     private Long likeCount;  // 좋아요 개수
+
 }
