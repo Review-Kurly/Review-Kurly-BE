@@ -14,7 +14,7 @@ public class ReviewRequestDto {
     @Schema(type = "integer", example = "2")
     private Long id;
 
-    @Schema(example = "https://www.kurly.com/goods/5000676")
+    @Schema(example = "https://www.kurly.com/goods/5000676") // TODO: 나중에 수정필요
     private MultipartFile imageUrl; // 이미지 등록
 
     @Schema(example = "우유 맛있어")
