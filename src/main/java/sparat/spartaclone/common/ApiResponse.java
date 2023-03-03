@@ -1,6 +1,7 @@
 package sparat.spartaclone.common;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,8 +27,12 @@ public class ApiResponse<T> {
         }
     }
 
+    @Schema(type = "integer", example = "200")
     private int code;
+
+    @Schema(type = "string", example = "success")
     private MessageType message;
+
     private T data;
 
     ApiResponse(HttpStatus httpStatus, MessageType messageType, T data) {
