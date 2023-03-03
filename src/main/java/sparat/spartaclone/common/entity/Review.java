@@ -39,9 +39,9 @@ public class Review extends Timestamped {
     @ManyToOne
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "review")
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "review")
     private List<ReviewLike> reviewLikeList = new ArrayList<>();
 }
