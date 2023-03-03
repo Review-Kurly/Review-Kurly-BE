@@ -1,8 +1,7 @@
-package sparat.spartaclone.mainpage.dto;
+package sparat.spartaclone.mainpage.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 public enum SortType {

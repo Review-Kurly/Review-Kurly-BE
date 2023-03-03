@@ -6,9 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sparat.spartaclone.common.ApiResponse;
-import sparat.spartaclone.mainpage.dto.MainPageRequestDto;
 import sparat.spartaclone.mainpage.dto.MainPageResponseDto;
-import sparat.spartaclone.mainpage.dto.SortType;
+import sparat.spartaclone.mainpage.enums.SortType;
 
 @Tag(name = "MainPage")
 @RestController
