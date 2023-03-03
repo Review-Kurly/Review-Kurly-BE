@@ -19,5 +19,5 @@ public class ReviewDetailResponseDto {
 
     private String userReview; // 리뷰 등록
 
-    private Long like;  // 좋아요 개수
+    private Long likeCount;  // 좋아요 개수
 }
