@@ -8,19 +8,17 @@ import org.springframework.web.bind.annotation.*;
 import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.mainpage.dto.MainPageRequestDto;
 import sparat.spartaclone.mainpage.dto.MainPageResponseDto;
-import sparat.spartaclone.user.dto.SignupRequestDto;
-import sparat.spartaclone.user.dto.UserResponseDto;
-
-import javax.validation.Valid;
+import sparat.spartaclone.mainpage.dto.SortType;
 
 @Tag(name = "MainPage")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class MainController {
-    @GetMapping("/main")
-    @Operation(summary = "메인 페이지", description ="?sort=[new || like || me]&keyword=test" )
-    public ApiResponse<MainPageResponseDto> getList(MainPageRequestDto mainPageRequestDto) {
+public class MainPageController {
+    @GetMapping("/reviews")
+    @Operation(summary = "메인 페이지", description = "sort에는 new | like | me가 들어갑니다.")
+    public ApiResponse<MainPageResponseDto> getList(@RequestParam(value = "sort")SortType sortType,
+                                                    @RequestParam(value = "keyword")String keyword){
         return ApiResponse.successOf(HttpStatus.CREATED, null);
     }
 
