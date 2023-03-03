@@ -15,14 +15,14 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 public class MainPageResponseDto {
 
 
-    @Schema(example = "1")
+    @Schema(type = "integer", example = "1")
     private Long id;
-    @Schema(example = "테스트")
+    @Schema(type = "string", example = "테스트")
     private String title;
-    @Schema(example = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/368px-Google_2015_logo.svg.png")
+    @Schema(type = "string", example = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/368px-Google_2015_logo.svg.png")
     private String imageUrl;
-    @Schema(example = "3000")
+    @Schema(type = "integer", example = "3000")
     private Long price;
-    @Schema(example = "1234")
+    @Schema(type = "integer", example = "1234")
     private Long likeCount;
 }
