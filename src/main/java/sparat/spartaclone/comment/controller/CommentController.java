@@ -14,7 +14,7 @@ import sparat.spartaclone.common.ApiResponse;
 @Tag(name = "comment")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     @PostMapping("/")
