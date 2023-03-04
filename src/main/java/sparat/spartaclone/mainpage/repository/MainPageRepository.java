@@ -17,10 +17,10 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByUserIdOrderByCreatedAtDesc(Long userId);
     List<Review> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Sort sort);
 
-    @Query(value = "SELECT *, (SELECT COMMENT_COUNT(*) FROM COMMENT WHERE REVIEW.ID = REVIEW_ID) COUNT FROM REVIEW WHERE COMMENT_COUNT >= 20 ORDER BY COMMENT_COUNT DESC", nativeQuery = true)
+    @Query(value = "SELECT *, (SELECT COMMENT_COUNT(*) FROM COMMENT WHERE REVIEW.ID = REVIEW_ID) COMMENT_COUNT FROM REVIEW WHERE COMMENT_COUNT >= 20 ORDER BY COMMENT_COUNT DESC", nativeQuery = true)
     List<Review> findAllByBestOrderByCommentCount();
 
-    @Query(value = "SELECT *, (SELECT COMMENT_COUNT(*) FROM COMMENT WHERE REVIEW.ID = REVIEW_ID) COUNT FROM REVIEW WHERE COMMENT_COUNT >= 20 ORDER BY PRICE :sort", nativeQuery = true)
+    @Query(value = "SELECT *, (SELECT COMMENT_COUNT(*) FROM COMMENT WHERE REVIEW.ID = REVIEW_ID) COMMENT_COUNT FROM REVIEW WHERE COMMENT_COUNT >= 20 ORDER BY PRICE :sort", nativeQuery = true)
     List<Review> findAllByBestOrderByPrice(int sort);
 
 

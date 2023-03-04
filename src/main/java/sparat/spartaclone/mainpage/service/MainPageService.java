@@ -67,7 +67,7 @@ public class MainPageService {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("검색조건이 이상합니다.");
+                throw new IllegalArgumentException();
         }
 
         for (Review review : reviewList) {
