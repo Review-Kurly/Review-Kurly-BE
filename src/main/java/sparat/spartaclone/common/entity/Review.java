@@ -11,10 +11,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "Review")
 @Getter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE Review SET is_Deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE Review SET isDeleted = true WHERE id=?")
 @Where(clause = "is_Deleted=false")
 public class Review extends Timestamped {
 
@@ -23,6 +23,7 @@ public class Review extends Timestamped {
     private Long id;
 
 
+    private boolean liked = false;  // 본인이 해당 게시물에 대해 좋아요를 눌렀는지 안눌렀는지 여부
     private String imageUrl; // 이미지 등록
 
     @Column(nullable = false)
@@ -51,10 +52,12 @@ public class Review extends Timestamped {
     @OneToMany(mappedBy = "review")
     private List<ReviewLike> reviewLikeList = new ArrayList<>();
 
+
+
     @Builder
     public Review(String imageUrl, String market, Long price,
                   String purchaseUrl, String title,
-                  String content, User user) {
+                  String content, User user, boolean liked) {
 
         this.imageUrl = imageUrl;
         this.market = market;
@@ -63,7 +66,9 @@ public class Review extends Timestamped {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.liked = liked;
     }
+
 
     public void updateReview(Long id, ReviewRequestDto requestDto){
         this.id = id;
@@ -73,6 +78,7 @@ public class Review extends Timestamped {
         this.purchaseUrl = requestDto.getPurchaseUrl();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+
 
     }
 

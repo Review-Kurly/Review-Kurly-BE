@@ -1,28 +1,27 @@
-package sparat.spartaclone.review.serviece;
+package sparat.spartaclone.review.service; // TODO: 오타 수정
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.User;
-import sparat.spartaclone.common.security.UserDetailsImpl;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
 import sparat.spartaclone.review.repository.ReviewRepository;
-import sparat.spartaclone.util.S3Service;
+import sparat.spartaclone.user.repository.UserRepository;
 import sparat.spartaclone.util.S3Uploader;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-    private S3Uploader s3Uploader;
-    private ReviewRepository reviewRepository;
+    private final S3Uploader s3Uploader;
+    private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, User user) {
@@ -39,9 +38,9 @@ public class ReviewService {
                     .title(requestDto.getTitle())
                     .content(requestDto.getContent())
                     .user(user)
+                    .liked(false)
                     .build();
-            reviewRepository.save(review);
-
+            review = reviewRepository.save(review);
             return new ReviewsDetailsResponseDto(review);
 
         } catch (IOException e) {
@@ -51,10 +50,16 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewsDetailsResponseDto getReview(Long reviewId) {
+    public ReviewsDetailsResponseDto getReview(Long reviewId, String username) throws AccessDeniedException {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 ()-> new CustomClientException("리뷰가 존재하지 않습니다.")
         );
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new EntityNotFoundException("작성자가 아닙니다.")
+        );
+
+        // TODO:islike 수정하기
+
 
         return new ReviewsDetailsResponseDto(review);
     }
@@ -64,10 +69,10 @@ public class ReviewService {
     public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, User user) {
         try{
             Review review = reviewRepository.findById(reviewId).orElseThrow(
-                    ()-> new CustomClientException("리뷰가 존재하지 않습니다. ")
+                    ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
             );
             if (!user.getId().equals(review.getUser().getId())){
-                throw  new CustomClientException("작성자가 아닙니다.");
+                throw  new AccessDeniedException("작성자가 아닙니다.");
             }
             String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
 
@@ -83,12 +88,12 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteReview(Long reviewId, User user) {
+    public void deleteReview(Long reviewId, User user) throws AccessDeniedException {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                ()-> new CustomClientException("리뷰가 존재하지 않습니다. ")
+                ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
         );
         if (!user.getId().equals(review.getUser().getId())){
-            throw  new CustomClientException("작성자가 아닙니다.");
+            throw  new AccessDeniedException("작성자가 아닙니다.");
         }
 
         reviewRepository.deleteById(reviewId);

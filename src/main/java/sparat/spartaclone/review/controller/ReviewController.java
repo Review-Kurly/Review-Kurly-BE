@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ConstantPoolReader;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sparat.spartaclone.common.ApiResponse;
@@ -14,9 +14,9 @@ import sparat.spartaclone.common.security.UserDetailsImpl;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsLikesResponseDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
-import sparat.spartaclone.review.serviece.ReviewService;
+import sparat.spartaclone.review.service.ReviewService;
 
-import javax.servlet.http.HttpServletResponse;
+import java.nio.file.AccessDeniedException;
 
 @Tag(name = "Review")
 @RestController
@@ -26,9 +26,13 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/")
+
+
+
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "리뷰 상세페이지 작성", description ="리뷰 상세페이지 댓글 목록까지 작성" + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<ReviewsDetailsResponseDto> createReview(@RequestBody ReviewRequestDto requestDto,
+    public ApiResponse<ReviewsDetailsResponseDto> createReview(
+                                                               @ModelAttribute ReviewRequestDto requestDto,
                                                                @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
 
 //        reviewService.createReview(requestDto,userDetails.getUser());
@@ -37,8 +41,8 @@ public class ReviewController {
 
     @GetMapping("/{reviewId}")
     @Operation(summary = "리뷰 상세페이지 조회", description = "리뷰 상세페이지 댓글 목록까지 조회 ")
-    public ApiResponse<ReviewsDetailsResponseDto> getReview(@PathVariable Long reviewId) {
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId));
+    public ApiResponse<ReviewsDetailsResponseDto> getReview(@PathVariable Long reviewId,@Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
+        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId,userDetails.getUsername()));
     }
 
     @PutMapping("/{reviewId}")
@@ -51,7 +55,7 @@ public class ReviewController {
 
     @DeleteMapping("/{reviewId}")
     @Operation(summary = "리뷰 상세페이지 삭제", description = "리뷰 상세페이지 댓글 목록까지 삭제 " + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<ReviewsDetailsResponseDto> deleteReview(@PathVariable Long reviewId,  @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ApiResponse<ReviewsDetailsResponseDto> deleteReview(@PathVariable Long reviewId,  @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
         reviewService.deleteReview(reviewId,userDetails.getUser());
         return ApiResponse.successOf(HttpStatus.CREATED,null);
     }

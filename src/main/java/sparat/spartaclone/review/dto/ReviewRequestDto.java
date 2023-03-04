@@ -14,7 +14,9 @@ public class ReviewRequestDto {
     @Schema(type = "integer", example = "2")
     private Long id;
 
-    @Schema(description = "매점사진") // TODO: 나중에 수정필요 -> 수정완료
+//    private boolean liked = false;
+
+    @Schema(description = "상품사진")
     private MultipartFile imageUrl; // 이미지 등록
 
     @Schema(example = "우유 맛있어")
@@ -45,5 +47,6 @@ public class ReviewRequestDto {
         this.market = market;
         this.purchaseUrl = purchaseUrl;
         this.content = content;
+//        this.liked = liked;
     }
 }
