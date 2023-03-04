@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.constant.ConstantTable;
+import sparat.spartaclone.common.security.UserDetailsImpl;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsLikesResponseDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;

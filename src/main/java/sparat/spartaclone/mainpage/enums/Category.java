@@ -4,26 +4,25 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-public enum SortType {
-    CHEAP("cheap"),
-    EXPENSIVE("expensive"),
-    OTHER("");
+public enum Category {
+    NEW("new-reviews"),
+    BEST("best-reviews");
 
     @Getter
     private final String value;
 
-    SortType(String value) {
+    Category(String value) {
         this.value = value;
     }
 
     @JsonCreator
-    public static SortType of(String value) {
-        for (SortType status : SortType.values()) {
+    public static Category of(String value) {
+        for (Category status : Category.values()) {
             if (status.getValue().equals(value)) {
                 return status;
             }
         }
-        return OTHER;
+        return null;
     }
 
     @JsonValue

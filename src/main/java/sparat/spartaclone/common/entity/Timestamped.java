@@ -22,5 +22,5 @@ public class Timestamped {
 
     @LastModifiedDate
     @Column
-    private LocalDateTime modefiedAt;
+    private LocalDateTime modifiedAt;
 }

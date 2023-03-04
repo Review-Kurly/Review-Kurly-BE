@@ -32,7 +32,7 @@ public class UserResponseDto {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
-        this.modifiedAt = user.getModefiedAt();
+        this.modifiedAt = user.getModifiedAt();
     }
 
     public static UserResponseDto of(User user) {
