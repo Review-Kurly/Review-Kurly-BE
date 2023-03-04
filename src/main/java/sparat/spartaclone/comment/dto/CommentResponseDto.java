@@ -3,6 +3,7 @@ package sparat.spartaclone.comment.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sparat.spartaclone.common.entity.Comment;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +14,17 @@ public class CommentResponseDto {
     private String nickname;
 
     @Schema(type = "string", example = "댓글")
-    private String comment;
+    private String content;
 
     private LocalDateTime createAt;
+
+    public CommentResponseDto(Comment comment) {
+        this.nickname = comment.getUser().getNickname();
+        this.content = comment.getContent();
+        this.createAt = comment.getCreatedAt();
+    }
+
+    public static CommentResponseDto of(Comment comment) {
+        return new CommentResponseDto((comment));
+    }
 }
