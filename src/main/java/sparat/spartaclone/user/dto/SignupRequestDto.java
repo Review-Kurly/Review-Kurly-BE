@@ -15,21 +15,22 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class SignupRequestDto {
     @Size(min=4, max=10)
-    @Pattern(regexp="^[a-z0-9]+$")
-    @Schema(example = "username", description = "4자 이상 10자 이하")
+    @Pattern(regexp = "/^(?=.*?[0-9])(?=.*?[a-z]).{6,16}$/")
+    @Schema(example = "username", description = "/^(?=.*?[0-9])(?=.*?[a-z]).{6,16}$/")
     private String username;
 
-    @Size(min=4, max=20)
-    @Schema(example = "nickname", description = "4자 이상 20자 이하")
+    @Pattern(regexp = "/^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,10}$/")
+    @Schema(example = "nickname", description = "/^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,10}$/")
     private String nickname;
 
     @Size(min=8, max=15)
-    @Pattern(regexp="^[A-Za-z0-9]+$")
-    @Schema(example = "password", description = "8자 이상 15자 이하")
+    @Pattern(regexp = "/^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$/")
+    @Schema(example = "password", description = "/^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$/")
     private String password;
 
     @Email
-    @Schema(example = "user@gmail.com")
+    @Pattern(regexp = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/")
+    @Schema(example = "user@gmail.com", description = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/")
     private String email;
 
 //    private UserRoleEnum userRoleEnum;
