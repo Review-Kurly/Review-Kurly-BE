@@ -42,6 +42,10 @@ public class ReviewsDetailsResponseDto {
         this.market = review.getMarket();
         this.purchaseUrl = review.getPurchaseUrl();
         this.content = review.getContent();
-        // TODO: 여기에 liked에 대한 작업 필요
+        this.liked =  review.isLiked();
+//        // TODO: 여기에 liked에 대한 작업 필요
     }
+
+
+
 }
