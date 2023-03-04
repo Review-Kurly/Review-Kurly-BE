@@ -1,4 +1,4 @@
-package sparat.spartaclone.config;
+package sparat.spartaclone.common.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

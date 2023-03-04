@@ -1,4 +1,4 @@
-package sparat.spartaclone.config;
+package sparat.spartaclone.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

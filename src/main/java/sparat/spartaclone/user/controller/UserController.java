@@ -13,6 +13,7 @@ import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.user.dto.LoginRequestDto;
 import sparat.spartaclone.user.dto.SignupRequestDto;
 import sparat.spartaclone.user.dto.UserResponseDto;
+import sparat.spartaclone.user.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,19 +23,17 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-//    private final UserService userService;
+    private final UserService userService;
 
     @PostMapping("/signup")
     @Operation(summary = "회원 가입", description = "username은 영문숫자 조합 4자 이상, 10자 이하\n password은 영문숫자 조합 8자 이상, 15자 이하\n, nickname은 아무 문자 4자 이상 20자 이하")
     public ApiResponse<UserResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
-//        return ApiResponse.successOf(HttpStatus.CREATED, userService.signup(signupRequestDto));
-        return ApiResponse.successOf(HttpStatus.CREATED, null);
+        return ApiResponse.successOf(HttpStatus.CREATED, userService.signup(signupRequestDto));
     }
 
     @PostMapping("/login")
     @Operation(summary = "로그인")
     public ApiResponse<UserResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-//        return ApiResponse.successOf(HttpStatus.CREATED, userService.login(signupRequestDto));
-        return ApiResponse.successOf(HttpStatus.OK, null);
+        return ApiResponse.successOf(HttpStatus.CREATED, userService.login(loginRequestDto, response));
     }
 }

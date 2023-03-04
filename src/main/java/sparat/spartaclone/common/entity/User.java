@@ -54,12 +54,4 @@ public class User  extends Timestamped {
         this.role = UserRoleEnum.USER;
         this.password = encodedPassword;
     }
-
-    public void update(SignupRequestDto signupRequestDto, String encodedPassword) {
-        this.username = signupRequestDto.getUsername();
-        this.nickname = signupRequestDto.getNickname();
-        this.email = signupRequestDto.getEmail();
-        this.role = UserRoleEnum.USER;
-        this.password = encodedPassword;
-    }
 }

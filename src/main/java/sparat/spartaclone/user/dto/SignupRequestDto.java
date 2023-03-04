@@ -25,7 +25,7 @@ public class SignupRequestDto {
 
     @Size(min=8, max=15)
     @Pattern(regexp="^[A-Za-z0-9]+$")
-    @Schema(example = "^[A-Za-z0-9]+$", description = "8자 이상 15자 이하")
+    @Schema(example = "password", description = "8자 이상 15자 이하")
     private String password;
 
     @Email

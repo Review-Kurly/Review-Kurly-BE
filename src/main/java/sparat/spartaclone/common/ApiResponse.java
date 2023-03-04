@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import sparat.spartaclone.common.dto.ErrorResponseDto;
 
 @Getter
 @Setter
@@ -45,7 +46,7 @@ public class ApiResponse<T> {
         return new ApiResponse(httpStatus, MessageType.SUCCESS, dto);
     }
 
-//    public static ApiResponse<ErrorResponseDto> failOf(HttpStatus httpStatus, ErrorResponseDto errorResponseDto) {
-//        return new ApiResponse(httpStatus, MessageType.EXCEPTION, errorResponseDto);
-//    }
+    public static ApiResponse<ErrorResponseDto> failOf(HttpStatus httpStatus, ErrorResponseDto errorResponseDto) {
+        return new ApiResponse(httpStatus, MessageType.EXCEPTION, errorResponseDto);
+    }
 }

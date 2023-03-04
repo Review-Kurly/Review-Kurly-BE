@@ -1,4 +1,4 @@
-package sparat.spartaclone.config;
+package sparat.spartaclone.common.config;
 
 
 //import com.sparta.posting.jwt.JwtAuthFilter;
@@ -22,6 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import sparat.spartaclone.common.jwt.JwtAuthFilter;
+import sparat.spartaclone.common.jwt.JwtUtil;
+import sparat.spartaclone.common.security.CustomAccessDeniedHandler;
+import sparat.spartaclone.common.security.CustomAuthenticationEntryPoint;
 
 // TODO: security 더 세부적으로 설정해야함
 @Configuration
@@ -29,9 +33,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig implements WebMvcConfigurer {
-//    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-//    private final CustomAccessDeniedHandler customAccessDeniedHandler;
-//    private final JwtUtil jwtUtil;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,23 +60,21 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/**").permitAll()
-//                .antMatchers("/docs/**").permitAll()
-//                .antMatchers("/api/users/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/boards/**").permitAll()
-                .anyRequest().authenticated();
-//                .and()
+                .antMatchers("/api/reviews/**").permitAll()
+                .antMatchers("/api/users/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/reviews-details/**").permitAll()
+                .antMatchers("/docs/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 // JWT 인증/인가를 사용하기 위한 설정
-//                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-        // http.formLogin().loginPage("/api/user/login-page").permitAll();
 
         // 401 Error 처리, authentication 즉, 인증과정에서 실패할 시 처리
-//        http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
+        http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
 
         // 403 Error 처리, 인증과는 별개로 추가적인 권한이 충족되지 않는 경우
-//        http.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
-
+        http.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
 
         return http.build();
     }
