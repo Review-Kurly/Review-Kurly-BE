@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ConstantPoolReader;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.constant.ConstantTable;
@@ -26,8 +27,8 @@ public class ReviewController {
     @PostMapping("/")
     @Operation(summary = "리뷰 상세페이지 작성", description ="리뷰 상세페이지 댓글 목록까지 작성" + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> createReview(@RequestBody ReviewRequestDto requestDto,
-                                                             HttpServletResponse response){
-        return ApiResponse.successOf(HttpStatus.OK,ReviewService.createReview(requestDto,response));
+                                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return ApiResponse.successOf(HttpStatus.OK,null);
     }
 
     @GetMapping("/{reviewId}")
@@ -40,19 +41,19 @@ public class ReviewController {
     @Operation(summary = "리뷰 상세페이지 수정", description = "리뷰 상세페이지 수정 " + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> putReview(@PathVariable Long reviewId,
                                                           @RequestBody ReviewRequestDto requestDto,
-                                                          HttpServletResponse response) {
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ApiResponse.successOf(HttpStatus.OK,null);
     }
 
     @DeleteMapping("/{reviewId}")
     @Operation(summary = "리뷰 상세페이지 삭제", description = "리뷰 상세페이지 댓글 목록까지 삭제 " + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<ReviewsDetailsResponseDto> deleteReview(@PathVariable Long reviewId, HttpServletResponse response){
+    public ApiResponse<ReviewsDetailsResponseDto> deleteReview(@PathVariable Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
 
     @PostMapping("/likes/{reviewId}")
     @Operation(summary = "좋아요 등록", description = "좋아요 등록 ")
-    public ApiResponse<ReviewsDetailsLikesResponseDto> toggleLikes(@PathVariable Long reviewId, HttpServletResponse response){
+    public ApiResponse<ReviewsDetailsLikesResponseDto> toggleLikes(@PathVariable Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return ApiResponse.successOf(HttpStatus.OK,null);
 
     }

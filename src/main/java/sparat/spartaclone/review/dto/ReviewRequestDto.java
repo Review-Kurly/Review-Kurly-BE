@@ -33,7 +33,6 @@ public class ReviewRequestDto {
     private String userReview; // 리뷰 등록
 
     @Builder
-
     public ReviewRequestDto(MultipartFile imageUrl,
                             String title,
                             Long price,
