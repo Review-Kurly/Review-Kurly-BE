@@ -62,8 +62,8 @@ public class ReviewController {
 
     @PostMapping("/likes/{reviewId}")
     @Operation(summary = "좋아요 등록", description = "좋아요 등록 ")
-    public ApiResponse<ReviewsDetailsLikesResponseDto> toggleLikes(@PathVariable Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return ApiResponse.successOf(HttpStatus.CREATED,null);
+    public ApiResponse<ReviewsDetailsResponseDto> toggleLikes(@PathVariable Long reviewId, @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.toggleLikes(reviewId, userDetails.getUsername()));
 
     }
 }

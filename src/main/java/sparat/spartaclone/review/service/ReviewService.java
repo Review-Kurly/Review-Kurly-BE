@@ -3,11 +3,15 @@ package sparat.spartaclone.review.service; // TODO: 오타 수정
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Review;
+import sparat.spartaclone.common.entity.ReviewLike;
 import sparat.spartaclone.common.entity.User;
+import sparat.spartaclone.common.enums.ErrorMessage;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
+import sparat.spartaclone.review.repository.ReviewLikeRepository;
 import sparat.spartaclone.review.repository.ReviewRepository;
 import sparat.spartaclone.user.repository.UserRepository;
 import sparat.spartaclone.util.S3Uploader;
@@ -15,6 +19,7 @@ import sparat.spartaclone.util.S3Uploader;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ public class ReviewService {
     private final S3Uploader s3Uploader;
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final ReviewLikeRepository reviewLikeRepository;
 
     @Transactional
     public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, User user) {
@@ -41,7 +47,7 @@ public class ReviewService {
                     .liked(false)
                     .build();
             review = reviewRepository.save(review);
-            return new ReviewsDetailsResponseDto(review);
+            return new ReviewsDetailsResponseDto(review, false);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -58,10 +64,11 @@ public class ReviewService {
                 ()-> new EntityNotFoundException("작성자가 아닙니다.")
         );
 
+        Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
+
         // TODO:islike 수정하기
 
-
-        return new ReviewsDetailsResponseDto(review);
+        return new ReviewsDetailsResponseDto(review, reviewLike.isPresent());
     }
 
 
@@ -78,7 +85,9 @@ public class ReviewService {
 
             review.updateReview(reviewId,requestDto );
 
-            return new ReviewsDetailsResponseDto(review);
+            Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
+
+            return new ReviewsDetailsResponseDto(review, reviewLike.isPresent());
 
 
         }catch (IOException e) {
@@ -97,5 +106,22 @@ public class ReviewService {
         }
 
         reviewRepository.deleteById(reviewId);
+    }
+
+    @Transactional
+    public ReviewsDetailsResponseDto toggleLikes(Long reviewId, String username) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
+        );
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getMessage())
+        );
+        Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), review.getId());
+        if (reviewLike.isEmpty()) {
+            reviewLikeRepository.saveAndFlush(new ReviewLike(review, user));
+        } else {
+            reviewLikeRepository.deleteByUserIdAndReviewId(user.getId(), reviewId);
+        }
+        return new ReviewsDetailsResponseDto(review, !reviewLike.isPresent());
     }
 }

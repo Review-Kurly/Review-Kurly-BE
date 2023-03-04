@@ -19,4 +19,9 @@ public class ReviewLike extends Timestamped {
 
     @ManyToOne
     private User user;
+
+    public ReviewLike(Review review, User user) {
+        this.user = user;
+        this.review = review;
+    }
 }
