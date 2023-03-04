@@ -55,10 +55,6 @@ public class CommentService {
                 () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
         );
 
-        if(!user.getId().equals(comment.getUser().getId())) {
-            throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
-        }
-
         comment.updateComment(commentId, requestDto.getContent());
         return CommentResponseDto.of(comment);
     }
@@ -73,9 +69,6 @@ public class CommentService {
                 () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
         );
 
-        if(!user.getId().equals(comment.getUser().getId())) {
-            throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
-        }
         commentRepository.deleteById(commentId);
     }
 }
