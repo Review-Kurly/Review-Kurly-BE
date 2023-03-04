@@ -30,6 +30,7 @@ public class UserResponseDto {
     public UserResponseDto(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
+        this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
         this.modifiedAt = user.getModifiedAt();
