@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sparat.spartaclone.common.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -26,15 +27,15 @@ public class UserResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-//    public UserOuterResponseDto(User user) {
-//        this.id = user.getId();
-//        this.username = user.getUsername();
-//        this.email = user.getEmail();
-//        this.createdAt = user.getCreatedAt();
-//        this.modifiedAt = user.getModifiedAt();
-//    }
-//
-//    public static UserOuterResponseDto of(User user) {
-//        return new UserOuterResponseDto(user);
-//    }
+    public UserResponseDto(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.createdAt = user.getCreatedAt();
+        this.modifiedAt = user.getModefiedAt();
+    }
+
+    public static UserResponseDto of(User user) {
+        return new UserResponseDto(user);
+    }
 }
