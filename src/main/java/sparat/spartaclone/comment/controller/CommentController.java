@@ -20,9 +20,9 @@ import sparat.spartaclone.common.security.UserDetailsImpl;
 @RequestMapping("/api/comments")
 public class CommentController {
     private final CommentService commentService;
-    @PostMapping("/")
+    @PostMapping("/{reviewId}")
     @Operation(summary = "댓글 등록", description = "댓글 등록, " + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<CommentResponseDto> createComment(@RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<CommentResponseDto> createComment(@PathVariable Long reviewId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ApiResponse.successOf(HttpStatus.CREATED, commentService.createComment(requestDto, userDetails.getUser()));
     }
 

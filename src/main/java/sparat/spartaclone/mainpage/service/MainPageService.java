@@ -57,10 +57,10 @@ public class MainPageService {
             case BEST:
                 switch (sortType) {
                     case CHEAP:
-                        reviewList = mainPageRepository.findAllByBestOrderByPrice(SortType.CHEAP.ordinal());
+                        reviewList = mainPageRepository.findAllByBestOrderByPriceCheap();
                         break;
                     case EXPENSIVE:
-                        reviewList = mainPageRepository.findAllByBestOrderByPrice(SortType.EXPENSIVE.ordinal());
+                        reviewList = mainPageRepository.findAllByBestOrderByPriceExpensive();
                         break;
                     default:
                         reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
@@ -71,8 +71,8 @@ public class MainPageService {
         }
 
         for (Review review : reviewList) {
-            Long likeCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, likeCount));
+            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
         }
 
 
