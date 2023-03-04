@@ -29,7 +29,7 @@ public class MainPageController {
         return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getRandomList());
     }
     @GetMapping("/reviews/{category}")
-    @Operation(summary = "검색 조건 페이지", description = "category는 new-reviews/ best-reviews \n sort에는 cheap / expensive 가 들어갑니다.")
+    @Operation(summary = "검색 조건 페이지", description = "category는 new-reviews/ best-reviews <br> sort에는 cheap / expensive 가 들어갑니다.")
     public ApiResponse<List<MainPageResponseDto>> getCategoryList(@PathVariable("category") Category category,
                                                             @RequestParam(value = "sort", required = false) SortType sortType,
                                                           @RequestParam(value = "keyword", required = false) String keyword,
