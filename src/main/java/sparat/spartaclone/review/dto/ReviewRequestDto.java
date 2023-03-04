@@ -24,26 +24,26 @@ public class ReviewRequestDto {
     private Long price; // 구매 가격
 
     @Schema(example = "쿠팡")
-    private String place; // 판매하는 곳
+    private String market; // 판매하는 곳
 
     @Schema(example = "https://www.kurly.com/goods/5000676")
     private String purchaseUrl; // 구매링크
 
     @Schema(example = "득템이다")
-    private String userReview; // 리뷰 등록
+    private String content; // 리뷰 등록
 
     @Builder
     public ReviewRequestDto(MultipartFile imageUrl,
                             String title,
                             Long price,
-                            String place,
+                            String market,
                             String purchaseUrl,
-                            String userReview) {
+                            String content) {
         this.imageUrl = imageUrl;
         this.title = title;
         this.price = price;
-        this.place = place;
+        this.market = market;
         this.purchaseUrl = purchaseUrl;
-        this.userReview = userReview;
+        this.content = content;
     }
 }

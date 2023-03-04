@@ -1,7 +1,9 @@
 package sparat.spartaclone.common.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sparat.spartaclone.review.dto.ReviewRequestDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -45,8 +47,9 @@ public class Review extends Timestamped {
     @OneToMany(mappedBy = "review")
     private List<ReviewLike> reviewLikeList = new ArrayList<>();
 
+    @Builder
     public Review(String imageUrl, String market, Long price,
-                  String purchaseUrl, String title, 
+                  String purchaseUrl, String title,
                   String content, User user) {
 
         this.imageUrl = imageUrl;
@@ -57,4 +60,17 @@ public class Review extends Timestamped {
         this.content = content;
         this.user = user;
     }
+
+    public void updateReview(Long id, ReviewRequestDto requestDto){
+        this.id = id;
+        this.imageUrl = String.valueOf(requestDto.getImageUrl());
+        this.market = requestDto.getMarket();
+        this.price = requestDto.getPrice();
+        this.purchaseUrl = requestDto.getPurchaseUrl();
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+
+    }
+
+
 }
