@@ -83,7 +83,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**") // 프로그램에서 제공하는 URL
-                .allowedOrigins("localhost", "sparta.chit-chat.shop") // 요청을 허용할 출처를 명시, 전체 허용 (가능하다면 목록을 작성한다.
+                .allowedOrigins("http://localhost:3000", "sparta.chit-chat.shop") // 요청을 허용할 출처를 명시, 전체 허용 (가능하다면 목록을 작성한다.
                 .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE") // 어떤 메서드를 허용할 것인지 (GET, POST...)
                 .allowedHeaders("*", "Content-Type", "Authorization") // 어떤 헤더들을 허용할 것인지
                 .exposedHeaders("Authorization")
