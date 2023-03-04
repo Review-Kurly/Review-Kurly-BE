@@ -1,4 +1,4 @@
-package sparat.spartaclone.review.serviece;
+package sparat.spartaclone.review.serviece; // TODO: 오타 수정
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
@@ -21,8 +21,8 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-    private S3Uploader s3Uploader;
-    private ReviewRepository reviewRepository;
+    private final S3Uploader s3Uploader;
+    private final ReviewRepository reviewRepository;
 
     @Transactional
     public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, User user) {
