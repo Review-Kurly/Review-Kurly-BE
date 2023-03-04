@@ -9,10 +9,14 @@ import java.util.Locale;
 @Getter
 @NoArgsConstructor
 public class CommentRequestDto {
+    @Schema(type = "integer")
+    private Long reviewId;
+
     @Schema(type = "string", example = "댓글")
     private String content;
 
-    public CommentRequestDto(String content) {
+    public CommentRequestDto(Long reviewId, String content) {
+        this.reviewId = reviewId;
         this.content = content;
     }
 }

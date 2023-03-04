@@ -26,10 +26,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public List<CommentResponseDto> commentList(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessage.BOARD_NOT_FOUND.getMessage())
-        );
+    public List<CommentResponseDto> getCommentList(Long reviewId) {
         List<CommentResponseDto> commentList = commentRepository.findAllByReviewId(reviewId);
         return commentList;
     }
@@ -54,7 +51,11 @@ public class CommentService {
                 () -> new EntityNotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMessage())
         );
 
-        if(!username.equals(comment.getUser().getUsername())) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
+        );
+
+        if(!user.getId().equals(comment.getUser().getId())) {
             throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
         }
 
@@ -68,7 +69,11 @@ public class CommentService {
                 () -> new EntityNotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMessage())
         );
 
-        if(!username.equals(comment.getUser().getUsername())) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
+        );
+
+        if(!user.getId().equals(comment.getUser().getId())) {
             throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
         }
         commentRepository.deleteById(commentId);
