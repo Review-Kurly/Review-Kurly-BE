@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ReviewService {
     private S3Uploader s3Uploader;
-    public ApiResponse<ReviewsDetailsResponseDto> createReview(ReviewRequestDto requestDto, HttpServletResponse response) {
+//    public ApiResponse<ReviewsDetailsResponseDto> createReview(ReviewRequestDto requestDto, HttpServletResponse response) {
 //        String imageUrl = s3Uploader.upload(response.getImageUrl());
 
-    }
+//    }
 }

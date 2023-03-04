@@ -9,7 +9,10 @@ import sparat.spartaclone.comment.repository.CommentRepository;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Comment;
 import sparat.spartaclone.common.entity.User;
+import sparat.spartaclone.common.enums.ErrorMessage;
 import sparat.spartaclone.common.handler.GlobalExceptionHandler;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,11 +42,11 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new CustomClientException("존재하지 않는 댓글입니다.")
+                () -> new EntityNotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMessage())
         );
 
         if(!user.getId().equals(comment.getUser().getId())) {
-            throw new CustomClientException("ID가 일치하지 않습니다.");
+            throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
         }
         commentRepository.deleteById(commentId);
     }
