@@ -8,9 +8,11 @@ import sparat.spartaclone.comment.dto.CommentResponseDto;
 import sparat.spartaclone.comment.repository.CommentRepository;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Comment;
+import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.common.enums.ErrorMessage;
 import sparat.spartaclone.common.handler.GlobalExceptionHandler;
+import sparat.spartaclone.review.repository.ReviewRepository;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -18,10 +20,15 @@ import javax.persistence.EntityNotFoundException;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    
+    private final ReviewRepository reviewRepository;
+
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
-        Comment comment = commentRepository.save(new Comment(requestDto, null, null));
+        Review review = reviewRepository.findById(requestDto.getReviewId()).orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessage.BOARD_NOT_FOUND.getMessage())
+        );
+
+        Comment comment = commentRepository.save(new Comment(requestDto, review, user));
         return CommentResponseDto.of(comment);
     }
 
