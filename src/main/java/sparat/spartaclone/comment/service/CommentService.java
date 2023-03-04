@@ -28,11 +28,11 @@ public class CommentService {
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new CustomClientException("존재하지 않는 댓글입니다.")
+                () -> new EntityNotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMessage())
         );
 
         if(!user.getId().equals(comment.getUser().getId())) {
-            throw new CustomClientException("ID가 일치하지 않습니다.");
+            throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
         }
 
         comment.updateComment(commentId, requestDto.getContent());
