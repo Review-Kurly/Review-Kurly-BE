@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.common.enums.ErrorMessage;
 import sparat.spartaclone.common.jwt.JwtUtil;
+import sparat.spartaclone.user.dto.UniquenessResponseDto;
 import sparat.spartaclone.user.dto.LoginRequestDto;
 import sparat.spartaclone.user.dto.SignupRequestDto;
 import sparat.spartaclone.user.dto.UserResponseDto;
@@ -64,5 +65,38 @@ public class UserService {
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), UserRoleEnum.USER));
         return UserResponseDto.of(user);
+    }
+
+    @Transactional
+    public UniquenessResponseDto checkUsernameUniqueness(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            return UniquenessResponseDto.of(true);
+        }
+        else {
+            return UniquenessResponseDto.of(false);
+        }
+    }
+
+    @Transactional
+    public UniquenessResponseDto checkNicknameUniqueness(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElse(null);
+        if (user == null) {
+            return UniquenessResponseDto.of(true);
+        }
+        else {
+            return UniquenessResponseDto.of(false);
+        }
+    }
+
+    @Transactional
+    public UniquenessResponseDto checkEmailUniqueness(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return UniquenessResponseDto.of(true);
+        }
+        else {
+            return UniquenessResponseDto.of(false);
+        }
     }
 }
