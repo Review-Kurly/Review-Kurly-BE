@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE Review SET isDeleted = true WHERE id=?")
-@Where(clause = "is_Deleted=false")
+@Where(clause = "isDeleted=false")
 public class Review extends Timestamped {
 
     @Id
