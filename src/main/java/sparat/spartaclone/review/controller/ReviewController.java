@@ -11,6 +11,7 @@ import sparat.spartaclone.common.constant.ConstantTable;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsLikesResponseDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
+import sparat.spartaclone.review.serviece.ReviewService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,14 +21,13 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class ReviewController {
 
-//    private final ReviewService reviewService;
+    private final ReviewService reviewService;
 
-    //  리뷰상세페이지 작성
     @PostMapping("/")
     @Operation(summary = "리뷰 상세페이지 작성", description ="리뷰 상세페이지 댓글 목록까지 작성" + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> createReview(@RequestBody ReviewRequestDto requestDto,
                                                              HttpServletResponse response){
-        return ApiResponse.successOf(HttpStatus.OK, null);
+        return ApiResponse.successOf(HttpStatus.OK,ReviewService.createReview(requestDto,response));
     }
 
     @GetMapping("/{reviewId}")
