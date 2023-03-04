@@ -32,19 +32,29 @@ public class CommentController {
 
     @PostMapping("/{reviewId}")
     @Operation(summary = "댓글 등록", description = "댓글 등록, " + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<CommentResponseDto> createComment(@PathVariable Long reviewId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<CommentResponseDto> createComment(
+            @PathVariable Long reviewId,
+            @RequestBody CommentRequestDto requestDto,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         return ApiResponse.successOf(HttpStatus.CREATED, commentService.createComment(reviewId, requestDto, userDetails.getUser().getUsername()));
     }
 
     @PutMapping("/{commentId}")
     @Operation(summary = "댓글 수정", description = "댓글 수정, " + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<CommentResponseDto> updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<CommentResponseDto> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentRequestDto requestDto,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ApiResponse.successOf(HttpStatus.OK, commentService.updateComment(commentId, requestDto, userDetails.getUser().getUsername()));
     }
 
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제", description = "댓글 삭제, " + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<CommentResponseDto> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<CommentResponseDto> deleteComment(
+            @PathVariable Long commentId,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         commentService.deleteComment(commentId, userDetails.getUser().getUsername());
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
