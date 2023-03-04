@@ -6,7 +6,8 @@ import lombok.Getter;
 
 public enum Category {
     NEW("new-reviews"),
-    BEST("best-reviews");
+    BEST("best-reviews"),
+    KEYWORD("keyword-reviews");
 
     @Getter
     private final String value;

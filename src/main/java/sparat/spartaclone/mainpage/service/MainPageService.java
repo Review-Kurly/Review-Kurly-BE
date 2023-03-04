@@ -66,6 +66,10 @@ public class MainPageService {
                         reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
                 }
                 break;
+            case KEYWORD:
+                reviewList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
+                break;
+
             default:
                 throw new IllegalArgumentException();
         }
