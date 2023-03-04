@@ -3,7 +3,7 @@ package sparat.spartaclone.review.service; // TODO: 오타 수정
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sparat.spartaclone.common.CustomClientException;
+import org.springframework.web.multipart.MultipartFile;
 import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
@@ -24,11 +24,16 @@ public class ReviewService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, User user) {
+    public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, String username, MultipartFile preImageUrl) {
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new EntityNotFoundException("작성자가 아닙니다.")
+        );
 
         try {
             //이미지 등록하기
-            String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
+            String imageUrl = s3Uploader.upload(preImageUrl);
+
 
             Review review = Review.builder()
                     .imageUrl(imageUrl)
@@ -52,7 +57,7 @@ public class ReviewService {
     @Transactional
     public ReviewsDetailsResponseDto getReview(Long reviewId, String username) throws AccessDeniedException {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                ()-> new CustomClientException("리뷰가 존재하지 않습니다.")
+                ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다.")
         );
         User user = userRepository.findByUsername(username).orElseThrow(
                 ()-> new EntityNotFoundException("작성자가 아닙니다.")
@@ -66,15 +71,16 @@ public class ReviewService {
 
 
     @Transactional
-    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, User user) {
+    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, MultipartFile preImageUrl, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new EntityNotFoundException("작성자가 아닙니다.")
+        );
         try{
             Review review = reviewRepository.findById(reviewId).orElseThrow(
                     ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
             );
-            if (!user.getId().equals(review.getUser().getId())){
-                throw  new AccessDeniedException("작성자가 아닙니다.");
-            }
-            String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
+
+            String imageUrl = s3Uploader.upload(preImageUrl);
 
             review.updateReview(reviewId,requestDto );
 
@@ -88,7 +94,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteReview(Long reviewId, User user) throws AccessDeniedException {
+    public void deleteReview(Long reviewId, String username) throws AccessDeniedException {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new EntityNotFoundException("작성자가 아닙니다.")
+        );
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
         );
