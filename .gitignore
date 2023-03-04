@@ -38,3 +38,6 @@ out/
 
 ### database ###
 /data
+
+### secret values ###
+application-dev.properties

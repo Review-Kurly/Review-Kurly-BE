@@ -4,13 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sparat.spartaclone.common.entity.Review;
 
 import java.time.LocalDateTime;
 
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class MainPageResponseDto {
 
@@ -24,5 +24,16 @@ public class MainPageResponseDto {
     @Schema(type = "integer", example = "3000")
     private Long price;
     @Schema(type = "integer", example = "1234")
-    private Long likeCount;
+    private Long commentCount;
+
+    public MainPageResponseDto(Review review, Long commentCount){
+        this.id = review.getId();
+        this.title = review.getTitle();
+        this.imageUrl = review.getImageUrl();
+        this.price = review.getPrice();
+        this.commentCount = commentCount;
+    }
+    public static MainPageResponseDto of(Review review, Long commentCount) {
+        return new MainPageResponseDto(review, commentCount);
+    }
 }

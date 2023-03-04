@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sparat.spartaclone.review.dto.ReviewRequestDto;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE Review SET is_Deleted = true WHERE id=?")
+@Where(clause = "is_Deleted=false")
 public class Review extends Timestamped {
 
     @Id

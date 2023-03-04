@@ -9,8 +9,10 @@ import java.util.Locale;
 @Getter
 @NoArgsConstructor
 public class CommentRequestDto {
-    @Schema(type = "string", example = "닉네임")
-    private String nickname;
     @Schema(type = "string", example = "댓글")
-    private String comment;
+    private String content;
+
+    public CommentRequestDto(String content) {
+        this.content = content;
+    }
 }
