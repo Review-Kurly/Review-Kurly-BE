@@ -44,4 +44,17 @@ public class Review extends Timestamped {
 
     @OneToMany(mappedBy = "review")
     private List<ReviewLike> reviewLikeList = new ArrayList<>();
+
+    public Review(String imageUrl, String market, Long price,
+                  String purchaseUrl, String title, 
+                  String content, User user) {
+
+        this.imageUrl = imageUrl;
+        this.market = market;
+        this.price = price;
+        this.purchaseUrl = purchaseUrl;
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
 }
