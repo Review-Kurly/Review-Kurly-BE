@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class CommentResponseDto {
+    private Long id;
     @Schema(type = "string", example = "닉네임")
     private String nickname;
 
@@ -19,6 +20,7 @@ public class CommentResponseDto {
     private LocalDateTime createAt;
 
     public CommentResponseDto(Comment comment) {
+        this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
