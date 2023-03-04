@@ -12,8 +12,8 @@ import java.util.ArrayList;
 @Entity(name = "Comment")
 @Getter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE Comment SET isDeleted = true WHERE id=?")
-@Where(clause = "isDeleted=false")
+@SQLDelete(sql = "UPDATE Comment SET is_Deleted = true WHERE id=?")
+@Where(clause = "is_Deleted=false")
 public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
