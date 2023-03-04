@@ -34,7 +34,7 @@ public class ReviewsDetailsResponseDto {
     private boolean liked = false;
 
 
-    public ReviewsDetailsResponseDto(Review review) {
+    public ReviewsDetailsResponseDto(Review review, boolean liked) {
         this.id = review.getId();
         this.imageUrl = review.getImageUrl();
         this.title = review.getTitle();
@@ -42,7 +42,7 @@ public class ReviewsDetailsResponseDto {
         this.market = review.getMarket();
         this.purchaseUrl = review.getPurchaseUrl();
         this.content = review.getContent();
-        this.liked =  review.isLiked();
+        this.liked =  liked;
 //        // TODO: 여기에 liked에 대한 작업 필요
     }
 
