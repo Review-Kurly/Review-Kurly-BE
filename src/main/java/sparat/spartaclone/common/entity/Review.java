@@ -14,8 +14,8 @@ import java.util.List;
 @Entity(name = "Review")
 @Getter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE Review SET isDeleted = true WHERE id=?")
-@Where(clause = "isDeleted=false")
+@SQLDelete(sql = "UPDATE Review SET IS_DELETED = true WHERE id=?")
+@Where(clause = "IS_DELETED=false")
 public class Review extends Timestamped {
 
     @Id

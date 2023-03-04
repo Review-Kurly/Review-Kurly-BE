@@ -26,9 +26,6 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-
-
-
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "리뷰 상세페이지 작성", description ="리뷰 상세페이지 댓글 목록까지 작성" + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> createReview(
@@ -41,7 +38,10 @@ public class ReviewController {
 
     @GetMapping("/{reviewId}")
     @Operation(summary = "리뷰 상세페이지 조회", description = "리뷰 상세페이지 댓글 목록까지 조회 ")
-    public ApiResponse<ReviewsDetailsResponseDto> getReview(@PathVariable Long reviewId,@Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
+    public ApiResponse<ReviewsDetailsResponseDto> getReview(
+            @PathVariable Long reviewId,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) throws AccessDeniedException {
         return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId,userDetails.getUsername()));
     }
 
