@@ -12,11 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class ReviewRequestDto {
 
-    @Schema(type = "integer", example = "2")
-    private Long id;
-
-//    private boolean liked = false;
-
     @Schema(description = "상품사진")
     private MultipartFile imageUrl; // 이미지 등록
 
@@ -35,19 +30,24 @@ public class ReviewRequestDto {
     @Schema(example = "득템이다")
     private String content; // 리뷰 등록
 
+    @Schema(example = "간단한 설명입니다")
+    private String description; // 리뷰 등록
+
     @Builder
     public ReviewRequestDto(MultipartFile imageUrl,
                             String title,
                             Long price,
                             String market,
                             String purchaseUrl,
-                            String content) {
+                            String content,
+                            String description) {
         this.imageUrl = imageUrl;
         this.title = title;
         this.price = price;
         this.market = market;
         this.purchaseUrl = purchaseUrl;
         this.content = content;
+        this.description = description;
 //        this.liked = liked;
     }
 }

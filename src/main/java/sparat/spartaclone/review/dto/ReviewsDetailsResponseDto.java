@@ -29,6 +29,9 @@ public class ReviewsDetailsResponseDto {
     @Schema(example = "득템이다")
     private String content; // 리뷰 등록
 
+    @Schema(example = "간단한 설명입니다")
+    private String description;
+
     // 본인이 해당 게시물에 대해 좋아요를 눌렀는지 안눌렀는지 여부
     @Schema(type = "boolean", example = "true")
     private boolean liked = false;
@@ -43,6 +46,7 @@ public class ReviewsDetailsResponseDto {
         this.purchaseUrl = review.getPurchaseUrl();
         this.content = review.getContent();
         this.liked =  liked;
+        this.description = review.getDescription();
 //        // TODO: 여기에 liked에 대한 작업 필요
     }
 

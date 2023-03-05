@@ -40,6 +40,9 @@ public class Review extends Timestamped {
     @Column(nullable = false)
     private String content; // 내용
 
+    @Column(nullable = true)
+    private String description;
+
     @Column(nullable = false)
     private boolean isDeleted = false; // 삭제 여부
 
@@ -57,7 +60,7 @@ public class Review extends Timestamped {
     @Builder
     public Review(String imageUrl, String market, Long price,
                   String purchaseUrl, String title,
-                  String content, User user, boolean liked) {
+                  String content, String description, User user, boolean liked) {
 
         this.imageUrl = imageUrl;
         this.market = market;
@@ -67,6 +70,7 @@ public class Review extends Timestamped {
         this.content = content;
         this.user = user;
         this.liked = liked;
+        this.description = description;
     }
 
 
