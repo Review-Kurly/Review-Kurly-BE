@@ -31,6 +31,6 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
 //    @Query(value = "SELECT *, (SELECT LIKECOUNT(*) FROM REVIEW_LIKE WHERE REVIEW.ID = REVIEW_ID) COUNT FROM REVIEW WHERE CONCAT('%',:keyword,'%') ORDER BY LIKECOUNT DESC", nativeQuery = true)
 //    List<Review> findAllByOrderByLikeCount(String keyword);
 
-    @Query(value = "SELECT * FROM REVIEW WHERE IS_DELETED = FALSE ORDER BY RAND() LIMIT 8", nativeQuery = true)
+    @Query(value = "SELECT * FROM REVIEW WHERE IS_DELETED = FALSE ORDER BY RAND() LIMIT 20", nativeQuery = true)
     List<Review> findRandom();
 }
