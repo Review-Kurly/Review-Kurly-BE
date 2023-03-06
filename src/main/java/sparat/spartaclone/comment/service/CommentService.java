@@ -40,9 +40,9 @@ public class CommentService {
         for (Comment comment: commentList) {
             if (user.isPresent()) {
                 Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.get().getId(), comment.getId());
-                commentResponseDtoList.add(new CommentResponseDto(comment, commentLike.isPresent(), commentLikeRepository.countByCommentId(comment.getId())));
+                commentResponseDtoList.add(new CommentResponseDto(comment, commentLike.isPresent()));
             } else {
-                commentResponseDtoList.add(new CommentResponseDto(comment, false, commentLikeRepository.countByCommentId(comment.getId())));
+                commentResponseDtoList.add(new CommentResponseDto(comment, false));
             }
         }
 
@@ -76,7 +76,7 @@ public class CommentService {
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), commentId);
 
         comment.updateComment(commentId, requestDto.getContent());
-        return new CommentResponseDto(comment, commentLike.isPresent(), commentLikeRepository.countByCommentId(commentId));
+        return new CommentResponseDto(comment, commentLike.isPresent());
     }
 
     @Transactional
@@ -109,6 +109,6 @@ public class CommentService {
         } else {
             commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), comment.getId());
         }
-        return new CommentResponseDto(comment, !commentLike.isPresent(), commentLikeRepository.countByCommentId(commentId));
+        return new CommentResponseDto(comment, !commentLike.isPresent());
     }
 }
