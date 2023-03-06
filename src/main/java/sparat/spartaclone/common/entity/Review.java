@@ -24,6 +24,7 @@ public class Review extends Timestamped {
 
 
     private boolean liked = false;  // 본인이 해당 게시물에 대해 좋아요를 눌렀는지 안눌렀는지 여부
+
     private String imageUrl; // 이미지 등록
 
     @Column(nullable = false)
@@ -74,17 +75,17 @@ public class Review extends Timestamped {
     }
 
 
-    public void updateReview(Long id, ReviewRequestDto requestDto){
-        this.id = id;
-        this.imageUrl = String.valueOf(requestDto.getImageUrl());
+    public void updateReview( ReviewRequestDto requestDto, String imageUrl){
         this.market = requestDto.getMarket();
+        this.imageUrl = imageUrl;
         this.price = requestDto.getPrice();
         this.purchaseUrl = requestDto.getPurchaseUrl();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-
+        this.description = requestDto.getDescription();
 
     }
+
 
 
 }

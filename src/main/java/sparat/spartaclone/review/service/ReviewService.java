@@ -3,6 +3,7 @@ package sparat.spartaclone.review.service; // TODO: 오타 수정
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Review;
@@ -43,6 +44,7 @@ public class ReviewService {
                     .purchaseUrl(requestDto.getPurchaseUrl())
                     .title(requestDto.getTitle())
                     .content(requestDto.getContent())
+                    .description(requestDto.getDescription())
                     .user(user)
                     .liked(false)
                     .build();
@@ -73,28 +75,32 @@ public class ReviewService {
 
 
     @Transactional
-    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, User user) {
-        try{
+    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException("작성자가 아닙니다.")
+        );
+        try {
             Review review = reviewRepository.findById(reviewId).orElseThrow(
-                    ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
+                    () -> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
             );
-            if (!user.getId().equals(review.getUser().getId())){
-                throw  new AccessDeniedException("작성자가 아닙니다.");
+
+            String uploadImage = null;
+            if (requestDto.getImageUrl() != null) {
+                // 새로운 이미지  생성
+                uploadImage = s3Uploader.upload(requestDto.getImageUrl()); // 새로운 이미지 추가
+            }else {
+                uploadImage = review.getImageUrl();// 기존이미지 유지
             }
-            String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
 
-            review.updateReview(reviewId,requestDto );
+            review.updateReview(requestDto, uploadImage);
+            return new ReviewsDetailsResponseDto(review, false);
 
-            Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
-
-            return new ReviewsDetailsResponseDto(review, reviewLike.isPresent());
-
-
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+
 
     @Transactional
     public void deleteReview(Long reviewId, User user) throws AccessDeniedException {
@@ -124,4 +130,7 @@ public class ReviewService {
         }
         return new ReviewsDetailsResponseDto(review, !reviewLike.isPresent());
     }
+
+
+
 }
