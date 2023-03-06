@@ -39,10 +39,10 @@ public class Review extends Timestamped {
     @Column(nullable = false)
     private String title; // 제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1500)
     private String content; // 내용
 
-    @Column(nullable = true, length = 1500)
+    @Column(nullable = true)
     private String description;
 
     @Column(nullable = false)
