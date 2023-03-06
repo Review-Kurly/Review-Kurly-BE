@@ -24,6 +24,7 @@ public class CommentResponseDto {
 
     private boolean liked = false;
 
+    
     public CommentResponseDto(Comment comment, boolean liked) {
         this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
@@ -33,6 +34,8 @@ public class CommentResponseDto {
         this.likeCount = (long) comment.getCommentLikeList().size();
     }
 
+    // TODO: 아래 함수 없이 위의 함수만으로 처리 가능
+    // TODO: 아래 함수에 의존적인 함수 수정 필요
     public CommentResponseDto(Comment comment, boolean liked, Long likeCount) {
         this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
