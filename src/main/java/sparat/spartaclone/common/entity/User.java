@@ -39,7 +39,7 @@ public class User  extends Timestamped {
     private boolean isDeleted = false;
 
     @OneToMany(mappedBy = "user")
-    List<ReviewDetails> reviewDetailsList = new ArrayList<>();
+    List<Review> reviewList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     List<Comment> commentList = new ArrayList<>();

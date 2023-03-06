@@ -18,7 +18,7 @@ import sparat.spartaclone.review.service.ReviewsDetailsService;
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 
-@Tag(name = "ReviewDetails")
+@Tag(name = "Review")
 @RestController
 @RequestMapping("/api/reviews-details")
 @RequiredArgsConstructor

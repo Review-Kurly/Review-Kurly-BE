@@ -15,13 +15,13 @@ public class ReviewLike extends Timestamped {
     private Long id;
 
     @ManyToOne
-    private ReviewDetails reviewDetails;
+    private Review review;
 
     @ManyToOne
     private User user;
 
-    public ReviewLike(ReviewDetails reviewDetails, User user) {
+    public ReviewLike(Review review, User user) {
         this.user = user;
-        this.reviewDetails = reviewDetails;
+        this.review = review;
     }
 }

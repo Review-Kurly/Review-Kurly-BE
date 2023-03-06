@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE Review SET IS_DELETED = true WHERE id=?")
 @Where(clause = "IS_DELETED=false")
-public class ReviewDetails extends Timestamped {
+public class Review extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,9 +60,9 @@ public class ReviewDetails extends Timestamped {
 
 
     @Builder
-    public ReviewDetails(String imageUrl, String market, Long price,
-                         String purchaseUrl, String title,
-                         String content, String description, User user, boolean liked) {
+    public Review(String imageUrl, String market, Long price,
+                  String purchaseUrl, String title,
+                  String content, String description, User user, boolean liked) {
 
         this.imageUrl = imageUrl;
         this.market = market;

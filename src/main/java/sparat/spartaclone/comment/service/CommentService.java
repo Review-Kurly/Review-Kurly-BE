@@ -9,10 +9,10 @@ import sparat.spartaclone.comment.repository.CommentLikeRepository;
 import sparat.spartaclone.comment.repository.CommentRepository;
 import sparat.spartaclone.common.entity.Comment;
 import sparat.spartaclone.common.entity.CommentLike;
-import sparat.spartaclone.common.entity.ReviewDetails;
+import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.common.enums.ErrorMessage;
-import sparat.spartaclone.review.repository.ReviewDetailsRepository;
+import sparat.spartaclone.review.repository.ReviewsDetailsRepository;
 import sparat.spartaclone.user.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final ReviewDetailsRepository reviewDetailsRepository;
+    private final ReviewsDetailsRepository reviewsDetailsRepository;
     private final UserRepository userRepository;
     private final CommentLikeRepository commentLikeRepository;
 
@@ -49,7 +49,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto createComment(Long reviewId, CommentRequestDto requestDto, String username) {
-        ReviewDetails reviewDetails = reviewDetailsRepository.findById(reviewId).orElseThrow(
+        Review review = reviewsDetailsRepository.findById(reviewId).orElseThrow(
                 () -> new EntityNotFoundException(ErrorMessage.BOARD_NOT_FOUND.getMessage())
         );
 
@@ -57,7 +57,7 @@ public class CommentService {
                 () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
         );
 
-        Comment comment = commentRepository.save(new Comment(requestDto, reviewDetails, user));
+        Comment comment = commentRepository.save(new Comment(requestDto, review, user));
         return new CommentResponseDto(comment, false);
     }
 

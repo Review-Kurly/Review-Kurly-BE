@@ -30,14 +30,14 @@ public class Comment extends Timestamped {
     private List<CommentLike> commentLikeList = new ArrayList<>();
 
     @ManyToOne
-    private ReviewDetails reviewDetails;
+    private Review review;
 
     @ManyToOne
     private User user;
 
-    public Comment(CommentRequestDto requestDto, ReviewDetails reviewDetails, User user) {
+    public Comment(CommentRequestDto requestDto, Review review, User user) {
         this.content = requestDto.getContent();
-        this.reviewDetails = reviewDetails;
+        this.review = review;
         this.user = user;
     }
 
