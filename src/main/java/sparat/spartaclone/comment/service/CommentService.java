@@ -7,14 +7,12 @@ import sparat.spartaclone.comment.dto.CommentRequestDto;
 import sparat.spartaclone.comment.dto.CommentResponseDto;
 import sparat.spartaclone.comment.repository.CommentLikeRepository;
 import sparat.spartaclone.comment.repository.CommentRepository;
-import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Comment;
 import sparat.spartaclone.common.entity.CommentLike;
-import sparat.spartaclone.common.entity.Review;
+import sparat.spartaclone.common.entity.ReviewDetails;
 import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.common.enums.ErrorMessage;
-import sparat.spartaclone.common.handler.GlobalExceptionHandler;
-import sparat.spartaclone.review.repository.ReviewRepository;
+import sparat.spartaclone.review.repository.ReviewDetailsRepository;
 import sparat.spartaclone.user.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final ReviewRepository reviewRepository;
+    private final ReviewDetailsRepository reviewDetailsRepository;
     private final UserRepository userRepository;
     private final CommentLikeRepository commentLikeRepository;
 
@@ -51,7 +49,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto createComment(Long reviewId, CommentRequestDto requestDto, String username) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
+        ReviewDetails reviewDetails = reviewDetailsRepository.findById(reviewId).orElseThrow(
                 () -> new EntityNotFoundException(ErrorMessage.BOARD_NOT_FOUND.getMessage())
         );
 
@@ -59,7 +57,7 @@ public class CommentService {
                 () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
         );
 
-        Comment comment = commentRepository.save(new Comment(requestDto, review, user));
+        Comment comment = commentRepository.save(new Comment(requestDto, reviewDetails, user));
         return new CommentResponseDto(comment, false);
     }
 

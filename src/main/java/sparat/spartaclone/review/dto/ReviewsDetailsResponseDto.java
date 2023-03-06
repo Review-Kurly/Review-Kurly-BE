@@ -3,7 +3,7 @@ package sparat.spartaclone.review.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sparat.spartaclone.common.entity.Review;
+import sparat.spartaclone.common.entity.ReviewDetails;
 
 @Getter
 @NoArgsConstructor
@@ -41,15 +41,15 @@ public class ReviewsDetailsResponseDto {
     private boolean owned = false;
 
 
-    public ReviewsDetailsResponseDto(Review review, boolean liked, boolean owned) {
-        this.id = review.getId();
-        this.imageUrl = review.getImageUrl();
-        this.title = review.getTitle();
-        this.price = review.getPrice();
-        this.market = review.getMarket();
-        this.purchaseUrl = review.getPurchaseUrl();
-        this.content = review.getContent();
-        this.description = review.getDescription();
+    public ReviewsDetailsResponseDto(ReviewDetails reviewDetails, boolean liked, boolean owned) {
+        this.id = reviewDetails.getId();
+        this.imageUrl = reviewDetails.getImageUrl();
+        this.title = reviewDetails.getTitle();
+        this.price = reviewDetails.getPrice();
+        this.market = reviewDetails.getMarket();
+        this.purchaseUrl = reviewDetails.getPurchaseUrl();
+        this.content = reviewDetails.getContent();
+        this.description = reviewDetails.getDescription();
         this.liked =  liked;
         this.owned = owned;
     }

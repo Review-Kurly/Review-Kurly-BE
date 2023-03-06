@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sparat.spartaclone.common.entity.Review;
+import sparat.spartaclone.common.entity.ReviewDetails;
 import sparat.spartaclone.mainpage.dto.MainPageResponseDto;
-import sparat.spartaclone.mainpage.enums.Category;
 import sparat.spartaclone.mainpage.enums.SortType;
 import sparat.spartaclone.mainpage.repository.MainPageCommentRepository;
 import sparat.spartaclone.mainpage.repository.MainPageRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -28,14 +26,14 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getKeywordList(String keyword, String page, String size) {
-        List<Review> reviewList;
+        List<ReviewDetails> reviewDetailsList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
 
-        reviewList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
+        reviewDetailsList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
 
-        for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        for (ReviewDetails reviewDetails : reviewDetailsList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(reviewDetails.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(reviewDetails, commentCount));
         }
 
 
@@ -44,7 +42,7 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getNewList(SortType sortType, String page, String size) {
-        List<Review> reviewList;
+        List<ReviewDetails> reviewDetailsList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
             sortType = SortType.OTHER;
@@ -58,22 +56,22 @@ public class MainPageService {
 
         switch (sortType) {
             case CHEAP:
-                reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.ASC, "price"));
+                reviewDetailsList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.ASC, "price"));
                 break;
             case EXPENSIVE:
-                reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "price"));
+                reviewDetailsList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "price"));
                 break;
             default:
-                reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "createdAt"));
+                reviewDetailsList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
-        for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        for (ReviewDetails reviewDetails : reviewDetailsList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(reviewDetails.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(reviewDetails, commentCount));
         }
 
-        for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        for (ReviewDetails reviewDetails : reviewDetailsList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(reviewDetails.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(reviewDetails, commentCount));
         }
 
 
@@ -82,25 +80,25 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getBestList(SortType sortType, String page, String size) {
-        List<Review> reviewList;
+        List<ReviewDetails> reviewDetailsList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
             sortType = SortType.OTHER;
 
         switch (sortType) {
             case CHEAP:
-                reviewList = mainPageRepository.findAllByBestOrderByPriceCheap();
+                reviewDetailsList = mainPageRepository.findAllByBestOrderByPriceCheap();
                 break;
             case EXPENSIVE:
-                reviewList = mainPageRepository.findAllByBestOrderByPriceExpensive();
+                reviewDetailsList = mainPageRepository.findAllByBestOrderByPriceExpensive();
                 break;
             default:
-                reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
+                reviewDetailsList = mainPageRepository.findAllByBestOrderByCommentCount();
         }
 
-        for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        for (ReviewDetails reviewDetails : reviewDetailsList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(reviewDetails.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(reviewDetails, commentCount));
         }
 
 
@@ -119,7 +117,7 @@ public class MainPageService {
 //                .atZone(ZoneId.systemDefault())
 //                .toLocalDateTime();
 //
-//        List<Review> reviewList;
+//        List<ReviewDetails> reviewList;
 //        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
 //
 //        switch (category) {
@@ -155,7 +153,7 @@ public class MainPageService {
 //                throw new IllegalArgumentException();
 //        }
 //
-//        for (Review review : reviewList) {
+//        for (ReviewDetails review : reviewList) {
 //            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
 //            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
 //        }
@@ -166,12 +164,12 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getRandomList() {
-        List<Review> reviewList = mainPageRepository.findRandom();
+        List<ReviewDetails> reviewDetailsList = mainPageRepository.findRandom();
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
 
-        for (Review review : reviewList) {
-            Long likeCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, likeCount));
+        for (ReviewDetails reviewDetails : reviewDetailsList) {
+            Long likeCount = mainPageCommentRepository.countByReviewId(reviewDetails.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(reviewDetails, likeCount));
         }
 
         return mainPageResponseDtoList;
@@ -180,7 +178,7 @@ public class MainPageService {
     @Transactional
     public MainPageResponseDto getMyList(String username) {
 //        나중에 user만들어지면 해야함
-//        List<Review> reviewList = new ArrayList<>();
+//        List<ReviewDetails> reviewList = new ArrayList<>();
 //                reviewList = mainPageRepository.findAllByUserIdOrderByCreatedAtDesc();
 
         return new MainPageResponseDto();

@@ -3,7 +3,7 @@ package sparat.spartaclone.common.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sparat.spartaclone.review.dto.ReviewRequestDto;
+import sparat.spartaclone.review.dto.ReviewsDetailsRequestDto;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE Review SET IS_DELETED = true WHERE id=?")
 @Where(clause = "IS_DELETED=false")
-public class Review extends Timestamped {
+public class ReviewDetails extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,9 +60,9 @@ public class Review extends Timestamped {
 
 
     @Builder
-    public Review(String imageUrl, String market, Long price,
-                  String purchaseUrl, String title,
-                  String content, String description, User user, boolean liked) {
+    public ReviewDetails(String imageUrl, String market, Long price,
+                         String purchaseUrl, String title,
+                         String content, String description, User user, boolean liked) {
 
         this.imageUrl = imageUrl;
         this.market = market;
@@ -76,7 +76,7 @@ public class Review extends Timestamped {
     }
 
 
-    public void updateReview( ReviewRequestDto requestDto, String imageUrl){
+    public void updateReview(ReviewsDetailsRequestDto requestDto, String imageUrl){
         this.market = requestDto.getMarket();
         this.imageUrl = imageUrl;
         this.price = requestDto.getPrice();
