@@ -27,7 +27,25 @@ public class MainPageService {
     private final MainPageCommentRepository mainPageCommentRepository;
 
     @Transactional
-    public List<MainPageResponseDto> getCategoryList(Category category, SortType sortType, String keyword, String page, String size) {
+    public List<MainPageResponseDto> getKeywordList(String keyword, String page, String size) {
+        List<Review> reviewList;
+        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
+
+        reviewList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
+
+        for (Review review : reviewList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        }
+
+
+        return mainPageResponseDtoList;
+    }
+
+    @Transactional
+    public List<MainPageResponseDto> getNewList(SortType sortType, String page, String size) {
+        List<Review> reviewList;
+        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
             sortType = SortType.OTHER;
         LocalDateTime before = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * (24 * 7)).toInstant()
@@ -38,40 +56,19 @@ public class MainPageService {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
 
-        List<Review> reviewList;
-        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
-
-        switch (category) {
-            case NEW:
-                switch (sortType) {
-                    case CHEAP:
-                        reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.ASC, "price"));
-                        break;
-                    case EXPENSIVE:
-                        reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "price"));
-                        break;
-                    default:
-                        reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "createdAt"));
-                }
+        switch (sortType) {
+            case CHEAP:
+                reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.ASC, "price"));
                 break;
-            case BEST:
-                switch (sortType) {
-                    case CHEAP:
-                        reviewList = mainPageRepository.findAllByBestOrderByPriceCheap();
-                        break;
-                    case EXPENSIVE:
-                        reviewList = mainPageRepository.findAllByBestOrderByPriceExpensive();
-                        break;
-                    default:
-                        reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
-                }
+            case EXPENSIVE:
+                reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "price"));
                 break;
-            case KEYWORD:
-                reviewList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
-                break;
-
             default:
-                throw new IllegalArgumentException();
+                reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "createdAt"));
+        }
+        for (Review review : reviewList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
         }
 
         for (Review review : reviewList) {
@@ -82,6 +79,90 @@ public class MainPageService {
 
         return mainPageResponseDtoList;
     }
+
+    @Transactional
+    public List<MainPageResponseDto> getBestList(SortType sortType, String page, String size) {
+        List<Review> reviewList;
+        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
+        if (sortType == null)
+            sortType = SortType.OTHER;
+
+        switch (sortType) {
+            case CHEAP:
+                reviewList = mainPageRepository.findAllByBestOrderByPriceCheap();
+                break;
+            case EXPENSIVE:
+                reviewList = mainPageRepository.findAllByBestOrderByPriceExpensive();
+                break;
+            default:
+                reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
+        }
+
+        for (Review review : reviewList) {
+            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
+            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        }
+
+
+        return mainPageResponseDtoList;
+    }
+//
+//    @Transactional
+//    public List<MainPageResponseDto> getCategoryList(Category category, SortType sortType, String keyword, String page, String size) {
+//        if (sortType == null)
+//            sortType = SortType.OTHER;
+//        LocalDateTime before = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * (24 * 7)).toInstant()
+//                .atZone(ZoneId.systemDefault())
+//                .toLocalDateTime();
+//
+//        LocalDateTime now = new Date().toInstant()
+//                .atZone(ZoneId.systemDefault())
+//                .toLocalDateTime();
+//
+//        List<Review> reviewList;
+//        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
+//
+//        switch (category) {
+//            case NEW:
+//                switch (sortType) {
+//                    case CHEAP:
+//                        reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.ASC, "price"));
+//                        break;
+//                    case EXPENSIVE:
+//                        reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "price"));
+//                        break;
+//                    default:
+//                        reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "createdAt"));
+//                }
+//                break;
+//            case BEST:
+//                switch (sortType) {
+//                    case CHEAP:
+//                        reviewList = mainPageRepository.findAllByBestOrderByPriceCheap();
+//                        break;
+//                    case EXPENSIVE:
+//                        reviewList = mainPageRepository.findAllByBestOrderByPriceExpensive();
+//                        break;
+//                    default:
+//                        reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
+//                }
+//                break;
+//            case KEYWORD:
+//                reviewList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
+//                break;
+//
+//            default:
+//                throw new IllegalArgumentException();
+//        }
+//
+//        for (Review review : reviewList) {
+//            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
+//            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+//        }
+//
+//
+//        return mainPageResponseDtoList;
+//    }
 
     @Transactional
     public List<MainPageResponseDto> getRandomList() {
