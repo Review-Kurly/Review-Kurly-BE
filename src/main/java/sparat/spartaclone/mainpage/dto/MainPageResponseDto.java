@@ -36,4 +36,12 @@ public class MainPageResponseDto {
     public static MainPageResponseDto of(Review review, Long commentCount) {
         return new MainPageResponseDto(review, commentCount);
     }
+
+    public MainPageResponseDto(Long id, String title, String imageUrl, Long price, Long commentCount) {
+        this.id = id;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.commentCount = commentCount;
+    }
 }

@@ -12,6 +12,7 @@ import sparat.spartaclone.mainpage.enums.SortType;
 import sparat.spartaclone.mainpage.repository.MainPageCommentRepository;
 import sparat.spartaclone.mainpage.repository.MainPageRepository;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -34,8 +35,7 @@ public class MainPageService {
         reviewList = mainPageRepository.findAllByTitleContainingOrderByCreatedAtDesc(keyword);
 
         for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+            mainPageResponseDtoList.add(MainPageResponseDto.of(review, (long) review.getCommentList().size()));
         }
 
 
@@ -66,14 +66,9 @@ public class MainPageService {
             default:
                 reviewList = mainPageRepository.findAllByCreatedAtBetween(before, now, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
-        for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
-        }
 
         for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+            mainPageResponseDtoList.add(MainPageResponseDto.of(review, (long) review.getCommentList().size()));
         }
 
 
@@ -82,7 +77,7 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getBestList(SortType sortType, String page, String size) {
-        List<Review> reviewList;
+        List<Object[]> reviewList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
             sortType = SortType.OTHER;
@@ -98,9 +93,8 @@ public class MainPageService {
                 reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
         }
 
-        for (Review review : reviewList) {
-            Long commentCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, commentCount));
+        for (Object[] reviewWithCommentCount : reviewList) {
+            mainPageResponseDtoList.add(parseReviewList(reviewWithCommentCount));
         }
 
 
@@ -166,12 +160,11 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getRandomList() {
-        List<Review> reviewList = mainPageRepository.findRandom();
+        List<Object[]> reviewList = mainPageRepository.findRandomWithCommentCount();
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
 
-        for (Review review : reviewList) {
-            Long likeCount = mainPageCommentRepository.countByReviewId(review.getId());
-            mainPageResponseDtoList.add(MainPageResponseDto.of(review, likeCount));
+        for (Object[] reviewWithCommentCount : reviewList) {
+            mainPageResponseDtoList.add(parseReviewList(reviewWithCommentCount));
         }
 
         return mainPageResponseDtoList;
@@ -184,5 +177,14 @@ public class MainPageService {
 //                reviewList = mainPageRepository.findAllByUserIdOrderByCreatedAtDesc();
 
         return new MainPageResponseDto();
+    }
+
+    public MainPageResponseDto parseReviewList(Object[] reviewList) {
+        BigInteger id = (BigInteger) reviewList[0];
+        String title = (String) reviewList[1];
+        String imageUrl = (String) reviewList[2];
+        BigInteger price = (BigInteger) reviewList[3];
+        BigInteger commentCount = (BigInteger) reviewList[4];
+        return new MainPageResponseDto(id.longValue(), title, imageUrl, price.longValue(), commentCount.longValue());
     }
 }
