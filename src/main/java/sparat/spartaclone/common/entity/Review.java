@@ -23,6 +23,7 @@ public class Review extends Timestamped {
     private Long id;
 
 
+    // TODO: 해당 필드 삭제 필요
     private boolean liked = false;  // 본인이 해당 게시물에 대해 좋아요를 눌렀는지 안눌렀는지 여부
 
     private String imageUrl; // 이미지 등록
