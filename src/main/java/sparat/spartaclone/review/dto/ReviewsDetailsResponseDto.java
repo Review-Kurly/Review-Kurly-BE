@@ -36,8 +36,12 @@ public class ReviewsDetailsResponseDto {
     @Schema(type = "boolean", example = "true")
     private boolean liked = false;
 
+    // 본인이 해당 게시물에 대한 작성자인 아닌지 여부
+    @Schema(type = "boolean", example = "true")
+    private boolean owned = false;
 
-    public ReviewsDetailsResponseDto(Review review, boolean liked) {
+
+    public ReviewsDetailsResponseDto(Review review, boolean liked, boolean owned) {
         this.id = review.getId();
         this.imageUrl = review.getImageUrl();
         this.title = review.getTitle();
@@ -45,11 +49,8 @@ public class ReviewsDetailsResponseDto {
         this.market = review.getMarket();
         this.purchaseUrl = review.getPurchaseUrl();
         this.content = review.getContent();
-        this.liked =  liked;
         this.description = review.getDescription();
-//        // TODO: 여기에 liked에 대한 작업 필요
+        this.liked =  liked;
+        this.owned = owned;
     }
-
-
-
 }
