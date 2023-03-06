@@ -24,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class MainPageService {
+    final long BEST_NEED_COMMENT_COUNT = 1L;
     private final MainPageRepository mainPageRepository;
     private final MainPageCommentRepository mainPageCommentRepository;
 
@@ -77,24 +78,30 @@ public class MainPageService {
 
     @Transactional
     public List<MainPageResponseDto> getBestList(SortType sortType, String page, String size) {
-        List<Object[]> reviewList;
+        List<Review> reviewList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
             sortType = SortType.OTHER;
 
         switch (sortType) {
             case CHEAP:
-                reviewList = mainPageRepository.findAllByBestOrderByPriceCheap();
+                reviewList = mainPageRepository.findAll(Sort.by(Sort.Direction.ASC, "price"));
                 break;
             case EXPENSIVE:
-                reviewList = mainPageRepository.findAllByBestOrderByPriceExpensive();
+                reviewList = mainPageRepository.findAll(Sort.by(Sort.Direction.DESC, "price"));
                 break;
             default:
-                reviewList = mainPageRepository.findAllByBestOrderByCommentCount();
+                for (Object[] reviewWithCommentCount : mainPageRepository.findAllOrderByCommentCount()) {
+                    MainPageResponseDto mainPageResponseDto = parseReviewList(reviewWithCommentCount);
+                    if(mainPageResponseDto.getCommentCount() >= BEST_NEED_COMMENT_COUNT)
+                        mainPageResponseDtoList.add(mainPageResponseDto);
+                }
+                return mainPageResponseDtoList;
         }
 
-        for (Object[] reviewWithCommentCount : reviewList) {
-            mainPageResponseDtoList.add(parseReviewList(reviewWithCommentCount));
+        for (Review reviewWithCommentCount : reviewList) {
+            if(reviewWithCommentCount.getCommentList().size() >= BEST_NEED_COMMENT_COUNT)
+                mainPageResponseDtoList.add(MainPageResponseDto.of(reviewWithCommentCount, (long) reviewWithCommentCount.getCommentList().size()));
         }
 
 
