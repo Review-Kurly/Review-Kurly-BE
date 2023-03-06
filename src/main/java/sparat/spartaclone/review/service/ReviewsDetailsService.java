@@ -8,10 +8,10 @@ import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.ReviewLike;
 import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.common.enums.ErrorMessage;
-import sparat.spartaclone.review.dto.ReviewRequestDto;
+import sparat.spartaclone.review.dto.ReviewsDetailsRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
 import sparat.spartaclone.review.repository.ReviewLikeRepository;
-import sparat.spartaclone.review.repository.ReviewRepository;
+import sparat.spartaclone.review.repository.ReviewsDetailsRepository;
 import sparat.spartaclone.user.repository.UserRepository;
 import sparat.spartaclone.util.S3Uploader;
 
@@ -22,14 +22,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewService {
+public class ReviewsDetailsService {
     private final S3Uploader s3Uploader;
-    private final ReviewRepository reviewRepository;
+    private final ReviewsDetailsRepository reviewsDetailsRepository;
     private final UserRepository userRepository;
     private final ReviewLikeRepository reviewLikeRepository;
 
     @Transactional
-    public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, User user) {
+    public ReviewsDetailsResponseDto createReview(ReviewsDetailsRequestDto requestDto, User user) {
 
         try {
             //이미지 등록하기
@@ -46,7 +46,7 @@ public class ReviewService {
                     .user(user)
                     .liked(false)
                     .build();
-            review = reviewRepository.save(review);
+            review = reviewsDetailsRepository.save(review);
             return new ReviewsDetailsResponseDto(review, false, true);
 
         } catch (IOException e) {
@@ -57,7 +57,7 @@ public class ReviewService {
 
     @Transactional
     public ReviewsDetailsResponseDto getReview(Long reviewId, String username) throws AccessDeniedException {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
+        Review review = reviewsDetailsRepository.findById(reviewId).orElseThrow(
                 () -> new CustomClientException("리뷰가 존재하지 않습니다.")
         );
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -71,12 +71,12 @@ public class ReviewService {
 
 
     @Transactional
-    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, String username) {
+    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewsDetailsRequestDto requestDto, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNotFoundException("작성자가 아닙니다.")
         );
         try {
-            Review review = reviewRepository.findById(reviewId).orElseThrow(
+            Review review = reviewsDetailsRepository.findById(reviewId).orElseThrow(
                     () -> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
             );
 
@@ -99,19 +99,19 @@ public class ReviewService {
 
     @Transactional
     public void deleteReview(Long reviewId, User user) throws AccessDeniedException {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
+        Review review = reviewsDetailsRepository.findById(reviewId).orElseThrow(
                 () -> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
         );
         if (!user.getId().equals(review.getUser().getId())) {
             throw new AccessDeniedException("작성자가 아닙니다.");
         }
 
-        reviewRepository.deleteById(reviewId);
+        reviewsDetailsRepository.deleteById(reviewId);
     }
 
     @Transactional
     public ReviewsDetailsResponseDto toggleLikes(Long reviewId, String username) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
+        Review review = reviewsDetailsRepository.findById(reviewId).orElseThrow(
                 () -> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
         );
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -128,14 +128,14 @@ public class ReviewService {
 
     @Transactional
     public boolean checkOwned(Long reviewId, String username) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
+        Review review = reviewsDetailsRepository.findById(reviewId).orElseThrow(
                 () -> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
         );
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getMessage())
         );
 
-        return reviewRepository.findByUserIdAndId(user.getId(), review.getId()).isPresent();
+        return reviewsDetailsRepository.findByUserIdAndId(user.getId(), review.getId()).isPresent();
     }
 
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import sparat.spartaclone.common.entity.Review;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Repository

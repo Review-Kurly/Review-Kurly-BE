@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.mainpage.dto.MainPageResponseDto;
-import sparat.spartaclone.mainpage.enums.Category;
 import sparat.spartaclone.mainpage.enums.SortType;
 import sparat.spartaclone.mainpage.repository.MainPageCommentRepository;
 import sparat.spartaclone.mainpage.repository.MainPageRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;

@@ -1,7 +1,6 @@
 package sparat.spartaclone.review.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.ReviewLike;
 
 import java.util.Optional;

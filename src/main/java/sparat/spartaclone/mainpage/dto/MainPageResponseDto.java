@@ -3,12 +3,7 @@ package sparat.spartaclone.mainpage.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import sparat.spartaclone.common.entity.Review;
-
-import java.time.LocalDateTime;
-
-import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 
 @Getter
 @NoArgsConstructor

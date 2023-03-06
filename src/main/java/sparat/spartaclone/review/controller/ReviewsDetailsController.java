@@ -8,14 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.constant.ConstantTable;
 import sparat.spartaclone.common.security.UserDetailsImpl;
-import sparat.spartaclone.review.dto.ReviewRequestDto;
-import sparat.spartaclone.review.dto.ReviewsDetailsLikesResponseDto;
+import sparat.spartaclone.review.dto.ReviewsDetailsRequestDto;
 import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
-import sparat.spartaclone.review.service.ReviewService;
+import sparat.spartaclone.review.service.ReviewsDetailsService;
 
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
@@ -24,17 +22,17 @@ import java.nio.file.AccessDeniedException;
 @RestController
 @RequestMapping("/api/reviews-details")
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewsDetailsController {
 
-    private final ReviewService reviewService;
+    private final ReviewsDetailsService reviewsDetailsService;
 
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "리뷰 상세페이지 작성", description ="리뷰 상세페이지 댓글 목록까지 작성" + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<ReviewsDetailsResponseDto> createReview(@ModelAttribute ReviewRequestDto requestDto,
+    public ApiResponse<ReviewsDetailsResponseDto> createReview(@ModelAttribute ReviewsDetailsRequestDto requestDto,
                                                                @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
 
 //        reviewService.createReview(requestDto,userDetails.getUser());
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.createReview(requestDto,userDetails.getUser()));
+        return ApiResponse.successOf(HttpStatus.CREATED, reviewsDetailsService.createReview(requestDto,userDetails.getUser()));
     }
 
     @GetMapping("/{reviewId}")
@@ -43,29 +41,29 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws AccessDeniedException {
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId,userDetails.getUsername()));
+        return ApiResponse.successOf(HttpStatus.CREATED, reviewsDetailsService.getReview(reviewId,userDetails.getUsername()));
     }
 
     @PutMapping(value ="/{reviewId}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "리뷰 상세페이지 수정", description = "리뷰 상세페이지 수정 " + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> updateReview(@PathVariable Long reviewId,
-                                                               @Valid @ModelAttribute ReviewRequestDto requestDto,
+                                                               @Valid @ModelAttribute ReviewsDetailsRequestDto requestDto,
                                                                @Parameter(hidden = true)@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.updateReview(reviewId,requestDto,userDetails.getUsername()));
+        return ApiResponse.successOf(HttpStatus.CREATED, reviewsDetailsService.updateReview(reviewId,requestDto,userDetails.getUsername()));
     }
 
 
     @DeleteMapping("/{reviewId}")
     @Operation(summary = "리뷰 상세페이지 삭제", description = "리뷰 상세페이지 댓글 목록까지 삭제 " + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> deleteReview(@PathVariable Long reviewId,  @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
-        reviewService.deleteReview(reviewId,userDetails.getUser());
+        reviewsDetailsService.deleteReview(reviewId,userDetails.getUser());
         return ApiResponse.successOf(HttpStatus.CREATED,null);
     }
 
     @PostMapping("/likes/{reviewId}")
     @Operation(summary = "좋아요 등록", description = "좋아요 등록 ")
     public ApiResponse<ReviewsDetailsResponseDto> toggleLikes(@PathVariable Long reviewId, @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.toggleLikes(reviewId, userDetails.getUsername()));
+        return ApiResponse.successOf(HttpStatus.CREATED, reviewsDetailsService.toggleLikes(reviewId, userDetails.getUsername()));
 
     }
 }

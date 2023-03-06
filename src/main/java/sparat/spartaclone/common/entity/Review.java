@@ -3,7 +3,7 @@ package sparat.spartaclone.common.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sparat.spartaclone.review.dto.ReviewRequestDto;
+import sparat.spartaclone.review.dto.ReviewsDetailsRequestDto;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -76,7 +76,7 @@ public class Review extends Timestamped {
     }
 
 
-    public void updateReview( ReviewRequestDto requestDto, String imageUrl){
+    public void updateReview(ReviewsDetailsRequestDto requestDto, String imageUrl){
         this.market = requestDto.getMarket();
         this.imageUrl = imageUrl;
         this.price = requestDto.getPrice();

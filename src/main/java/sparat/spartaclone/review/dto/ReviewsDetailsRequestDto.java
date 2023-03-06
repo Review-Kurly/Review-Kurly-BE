@@ -1,8 +1,6 @@
 package sparat.spartaclone.review.dto;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReviewRequestDto {
+public class ReviewsDetailsRequestDto {
     @Schema(description = "상품사진")
     private MultipartFile imageFile; // 이미지 등록
 

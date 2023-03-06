@@ -5,6 +5,6 @@ import sparat.spartaclone.common.entity.Review;
 
 import java.util.Optional;
 
-public interface ReviewRepository extends JpaRepository<Review,Long> {
+public interface ReviewsDetailsRepository extends JpaRepository<Review,Long> {
     Optional<Review> findByUserIdAndId(Long id, Long id1);
 }
