@@ -30,6 +30,8 @@ public class CommentResponseDto {
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
         this.liked = liked;
+
+        // TODO: 해당하는 부분에서 @OneToMany 필드를 불러와 size() 함수를 통해 값 세팅하기
         this.likeCount = comment.getLikeCount();
     }
 

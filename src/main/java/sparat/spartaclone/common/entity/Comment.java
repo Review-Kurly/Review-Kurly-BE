@@ -26,6 +26,7 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    // TODO: likeCount가 아닌, @OneToMany 필드가 필요함
     private Long likeCount;
 
     @ManyToOne
