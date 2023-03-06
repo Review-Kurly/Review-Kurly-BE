@@ -33,7 +33,6 @@ public class ControllerUseTime {
             // 사용된 controller class
             String controllerClassName = joinPoint.getTarget().getClass().getSimpleName();
 
-            log.info("[Controller Used Time] Controller: " + controllerClassName + ", Total Time1: " + runTime + " ms");
             log.info("[Controller Used Time] Controller: " + controllerClassName + ", Total Time: " + runTime + " ms");
         }
     }

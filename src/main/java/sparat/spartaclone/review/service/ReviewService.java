@@ -60,13 +60,19 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new CustomClientException("리뷰가 존재하지 않습니다.")
         );
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("작성자가 아닙니다.")
-        );
 
-        Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
+        boolean isLiked = false;
+        boolean isOwned = false;
+        if (username != null) {
+            User user = userRepository.findByUsername(username).orElseThrow(
+                    () -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getMessage())
+            );
+            Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
+            isLiked = reviewLike.isPresent();
+            isOwned = checkOwned(reviewId, username);
+        }
 
-        return new ReviewsDetailsResponseDto(review, reviewLike.isPresent(), checkOwned(reviewId, username));
+        return new ReviewsDetailsResponseDto(review, isLiked, isOwned);
     }
 
 

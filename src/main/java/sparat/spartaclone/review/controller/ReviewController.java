@@ -43,7 +43,7 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws AccessDeniedException {
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId,userDetails.getUsername()));
+        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId, userDetails == null ? null : userDetails.getUsername()));
     }
 
     @PutMapping(value ="/{reviewId}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
