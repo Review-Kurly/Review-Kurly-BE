@@ -63,7 +63,7 @@ public class MainPageController {
     }
 
     @GetMapping("/reviews/best-reviews")
-    @Operation(summary = "베스트", description = "best는 댓글 1개 이상일때 나오고 sort에는 cheap / expensive 가 들어갑니다. 없으면 최신순으로 정렬됩니다.")
+    @Operation(summary = "베스트", description = "best는 댓글 1개 이상일때 나오고 sort에는 cheap / expensive 가 들어갑니다. 없으면 댓글순으로 정렬됩니다.")
     public ApiResponse<List<MainPageResponseDto>> getBestList(
                                                             @RequestParam(value = "sort", required = false) SortType sortType,
                                                           @RequestParam(value = "page", required = false) String page,
