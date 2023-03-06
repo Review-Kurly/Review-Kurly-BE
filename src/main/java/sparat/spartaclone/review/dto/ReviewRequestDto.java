@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ReviewRequestDto {
     @Schema(description = "상품사진")
-    private MultipartFile imageUrl; // 이미지 등록
+    private MultipartFile imageFile; // 이미지 등록
 
     @Schema(example = "우유 맛있어")
     @NotNull

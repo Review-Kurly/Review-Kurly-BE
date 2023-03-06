@@ -3,8 +3,6 @@ package sparat.spartaclone.review.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.ReviewLike;
@@ -35,7 +33,7 @@ public class ReviewService {
 
         try {
             //이미지 등록하기
-            String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
+            String imageUrl = s3Uploader.upload(requestDto.getImageFile());
 
             Review review = Review.builder()
                     .imageUrl(imageUrl)
@@ -83,9 +81,9 @@ public class ReviewService {
             );
 
             String uploadImage = null;
-            if (requestDto.getImageUrl() != null) {
+            if (requestDto.getImageFile() != null) {
                 // 새로운 이미지  생성
-                uploadImage = s3Uploader.upload(requestDto.getImageUrl()); // 새로운 이미지 추가
+                uploadImage = s3Uploader.upload(requestDto.getImageFile()); // 새로운 이미지 추가
             } else {
                 uploadImage = review.getImageUrl();// 기존이미지 유지
             }
