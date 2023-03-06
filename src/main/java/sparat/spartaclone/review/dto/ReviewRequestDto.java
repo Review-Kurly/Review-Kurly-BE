@@ -1,19 +1,19 @@
 package sparat.spartaclone.review.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Data
 public class ReviewRequestDto {
 
     @Schema(description = "상품사진")
-    private MultipartFile imageUrl; // 이미지 등록
+    @Nullable
+    private MultipartFile imageFile = null; // 이미지 등록
 
     @Schema(example = "우유 맛있어")
     private String title; // 제목
@@ -33,21 +33,21 @@ public class ReviewRequestDto {
     @Schema(example = "간단한 설명입니다")
     private String description; // 리뷰 등록
 
-    @Builder
-    public ReviewRequestDto(MultipartFile imageUrl,
-                            String title,
-                            Long price,
-                            String market,
-                            String purchaseUrl,
-                            String content,
-                            String description) {
-        this.imageUrl = imageUrl;
-        this.title = title;
-        this.price = price;
-        this.market = market;
-        this.purchaseUrl = purchaseUrl;
-        this.content = content;
-        this.description = description;
+//    @Builder
+//    public ReviewRequestDto(MultipartFile imageFile,
+//                            String title,
+//                            Long price,
+//                            String market,
+//                            String purchaseUrl,
+//                            String content,
+//                            String description) {
+//        this.imageFile = imageFile;
+//        this.title = title;
+//        this.price = price;
+//        this.market = market;
+//        this.purchaseUrl = purchaseUrl;
+//        this.content = content;
+//        this.description = description;
 //        this.liked = liked;
-    }
+//    }
 }

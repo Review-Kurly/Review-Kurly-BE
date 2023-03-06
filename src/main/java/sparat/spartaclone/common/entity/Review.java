@@ -76,7 +76,7 @@ public class Review extends Timestamped {
 
     public void updateReview(Long id, ReviewRequestDto requestDto){
         this.id = id;
-        this.imageUrl = String.valueOf(requestDto.getImageUrl());
+        this.imageUrl = String.valueOf(requestDto.getImageFile());
         this.market = requestDto.getMarket();
         this.price = requestDto.getPrice();
         this.purchaseUrl = requestDto.getPurchaseUrl();

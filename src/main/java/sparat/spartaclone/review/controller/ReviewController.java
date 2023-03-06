@@ -28,8 +28,7 @@ public class ReviewController {
 
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "리뷰 상세페이지 작성", description ="리뷰 상세페이지 댓글 목록까지 작성" + ConstantTable.HEADER_NEEDED)
-    public ApiResponse<ReviewsDetailsResponseDto> createReview(
-                                                               @ModelAttribute ReviewRequestDto requestDto,
+    public ApiResponse<ReviewsDetailsResponseDto> createReview(@ModelAttribute ReviewRequestDto requestDto,
                                                                @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
 
 //        reviewService.createReview(requestDto,userDetails.getUser());
@@ -45,12 +44,12 @@ public class ReviewController {
         return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId,userDetails.getUsername()));
     }
 
-    @PutMapping("/{reviewId}")
+    @PutMapping(value ="/{reviewId}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "리뷰 상세페이지 수정", description = "리뷰 상세페이지 수정 " + ConstantTable.HEADER_NEEDED)
     public ApiResponse<ReviewsDetailsResponseDto> updateReview(@PathVariable Long reviewId,
-                                                               @RequestBody ReviewRequestDto requestDto,
+                                                               @ModelAttribute ReviewRequestDto requestDto,
                                                                @Parameter(hidden = true)@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.updateReview(reviewId,requestDto,userDetails.getUser()));
+        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.updateReview(reviewId,requestDto,userDetails.getUsername()));
     }
 
     @DeleteMapping("/{reviewId}")
