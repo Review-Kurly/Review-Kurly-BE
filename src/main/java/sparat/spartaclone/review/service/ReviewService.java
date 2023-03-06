@@ -3,6 +3,8 @@ package sparat.spartaclone.review.service; // TODO: 오타 수정
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Review;
 import sparat.spartaclone.common.entity.ReviewLike;
@@ -33,7 +35,7 @@ public class ReviewService {
 
         try {
             //이미지 등록하기
-            String imageUrl = s3Uploader.upload(requestDto.getImageFile());
+            String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
 
             Review review = Review.builder()
                     .imageUrl(imageUrl)
@@ -72,30 +74,6 @@ public class ReviewService {
     }
 
 
-//    @Transactional
-//    public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, User user) {
-//        try{
-//            Review review = reviewRepository.findById(reviewId).orElseThrow(
-//                    ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
-//            );
-//            if (!user.getId().equals(review.getUser().getId())){
-//                throw  new AccessDeniedException("작성자가 아닙니다.");
-//            }
-//            String imageUrl = s3Uploader.upload(requestDto.getImageUrl());
-//
-//            review.updateReview(reviewId,requestDto );
-//
-//            Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
-//
-//            return new ReviewsDetailsResponseDto(review, reviewLike.isPresent());
-//
-//
-//        }catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//    }
-
     @Transactional
     public ReviewsDetailsResponseDto updateReview(Long reviewId, ReviewRequestDto requestDto, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -106,31 +84,16 @@ public class ReviewService {
                     () -> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
             );
 
-            //새로운 이미지가 있는지 확인하기
-//            String originalImageUrl = review.getImageUrl(); // 기존 이미지
-//            MultipartFile newImageUrl = requestDto.getImageUrl(); // 새로운 이미지
-
-            String uploadImage = "";
-            if (requestDto.getImageFile() == null || requestDto.getImageFile().isEmpty()) {
-                uploadImage = review.getImageUrl(); // 기존이미지 유지
+            String uploadImage = null;
+            if (requestDto.getImageUrl() != null) {
+                // 새로운 이미지  생성
+                uploadImage = s3Uploader.upload(requestDto.getImageUrl()); // 새로운 이미지 추가
             }else {
-                uploadImage = s3Uploader.upload(requestDto.getImageFile()); //새로운 이미지 넣기
+                uploadImage = review.getImageUrl();// 기존이미지 유지
             }
 
-            review = Review.builder()
-                    .imageUrl(uploadImage)
-                    .market(requestDto.getMarket())
-                    .price(requestDto.getPrice())
-                    .purchaseUrl(requestDto.getPurchaseUrl())
-                    .title(requestDto.getTitle())
-                    .content(requestDto.getContent())
-                    .description(requestDto.getDescription())
-                    .user(user)
-                    .liked(false)
-                    .build();
-            review = reviewRepository.saveAndFlush(review);
+            review.updateReview(requestDto, uploadImage);
             return new ReviewsDetailsResponseDto(review, false);
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -138,7 +101,8 @@ public class ReviewService {
     }
 
 
-            @Transactional
+
+    @Transactional
     public void deleteReview(Long reviewId, User user) throws AccessDeniedException {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 ()-> new EntityNotFoundException("리뷰가 존재하지 않습니다. ")
@@ -166,4 +130,7 @@ public class ReviewService {
         }
         return new ReviewsDetailsResponseDto(review, !reviewLike.isPresent());
     }
+
+
+
 }
