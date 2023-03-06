@@ -28,16 +28,49 @@ public class MainPageController {
 
         return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getRandomList());
     }
-    @GetMapping("/reviews/{category}")
-    @Operation(summary = "검색 조건 페이지", description = "category는 keyword-reviews / new-reviews / best-reviews <br> sort에는 cheap / expensive 가 들어갑니다.")
-    public ApiResponse<List<MainPageResponseDto>> getCategoryList(@PathVariable("category") Category category,
-                                                            @RequestParam(value = "sort", required = false) SortType sortType,
+//    @GetMapping("/reviews/{category}")
+//    @Operation(summary = "검색 조건 페이지", description = "category는 keyword-reviews / new-reviews / best-reviews <br> sort에는 cheap / expensive 가 들어갑니다.")
+//    public ApiResponse<List<MainPageResponseDto>> getCategoryList(@PathVariable("category") Category category,
+//                                                            @RequestParam(value = "sort", required = false) SortType sortType,
+//                                                          @RequestParam(value = "keyword", required = false) String keyword,
+//                                                          @RequestParam(value = "page", required = false) String page,
+//                                                          @RequestParam(value = "size", required = false) String size
+//                                                    ) {
+//
+//        return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getCategoryList(category, sortType, keyword, page, size));
+//    }
+
+    @GetMapping("/reviews/keyword-reviews")
+    @Operation(summary = "검색 조건 페이지", description = "무조건 최신순으로 정렬됩니다.")
+    public ApiResponse<List<MainPageResponseDto>> getKeywordList(
                                                           @RequestParam(value = "keyword", required = false) String keyword,
                                                           @RequestParam(value = "page", required = false) String page,
                                                           @RequestParam(value = "size", required = false) String size
                                                     ) {
 
-        return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getCategoryList(category, sortType, keyword, page, size));
+        return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getKeywordList(keyword, page, size));
+    }
+
+    @GetMapping("/reviews/new-reviews")
+    @Operation(summary = "신상품", description = "new는 하루 전날까지 올라온 게시물을 검색합니다.  sort에는 cheap / expensive 가 들어갑니다. 없으면 최신순으로 정렬됩니다.")
+    public ApiResponse<List<MainPageResponseDto>> getNewList(
+                                                            @RequestParam(value = "sort", required = false) SortType sortType,
+                                                          @RequestParam(value = "page", required = false) String page,
+                                                          @RequestParam(value = "size", required = false) String size
+                                                    ) {
+
+        return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getNewList(sortType, page, size));
+    }
+
+    @GetMapping("/reviews/best-reviews")
+    @Operation(summary = "베스트", description = "best는 댓글 1개 이상일때 나오고 sort에는 cheap / expensive 가 들어갑니다. 없으면 최신순으로 정렬됩니다.")
+    public ApiResponse<List<MainPageResponseDto>> getBestList(
+                                                            @RequestParam(value = "sort", required = false) SortType sortType,
+                                                          @RequestParam(value = "page", required = false) String page,
+                                                          @RequestParam(value = "size", required = false) String size
+                                                    ) {
+
+        return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getBestList(sortType, page, size));
     }
 }
 
