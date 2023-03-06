@@ -1,4 +1,4 @@
-package sparat.spartaclone.review.service; // TODO: 오타 수정
+package sparat.spartaclone.review.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

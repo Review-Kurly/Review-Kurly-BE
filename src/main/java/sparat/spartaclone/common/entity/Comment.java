@@ -8,6 +8,7 @@ import sparat.spartaclone.comment.dto.CommentRequestDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Comment")
 @Getter
@@ -24,6 +25,9 @@ public class Comment extends Timestamped {
 
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "comment")
+    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     @ManyToOne
     private Review review;

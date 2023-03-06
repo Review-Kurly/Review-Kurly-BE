@@ -7,5 +7,5 @@ import sparat.spartaclone.common.entity.Comment;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<CommentResponseDto> findAllByReviewId(Long reviewId);
+    List<Comment> findAllByReviewId(Long reviewId);
 }
