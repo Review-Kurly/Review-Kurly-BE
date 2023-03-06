@@ -19,14 +19,26 @@ public class CommentResponseDto {
 
     private LocalDateTime createAt;
 
-    public CommentResponseDto(Comment comment) {
+    private Long likeCount;
+
+    private boolean liked = false;
+
+//    public CommentResponseDto(Comment comment) {
+//        this.id = comment.getId();
+//        this.nickname = comment.getUser().getNickname();
+//        this.content = comment.getContent();
+//        this.createAt = comment.getCreatedAt();
+//    }
+
+    public CommentResponseDto(Comment comment, boolean liked) {
         this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
+        this.liked = liked;
     }
 
-    public static CommentResponseDto of(Comment comment) {
-        return new CommentResponseDto((comment));
-    }
+//    public static CommentResponseDto of(Comment comment) {
+//        return new CommentResponseDto((comment));
+//    }
 }

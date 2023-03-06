@@ -8,6 +8,7 @@ import sparat.spartaclone.comment.dto.CommentRequestDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Comment")
 @Getter
@@ -30,6 +31,9 @@ public class Comment extends Timestamped {
 
     @ManyToOne
     private User user;
+
+//    @OneToMany(mappedBy = "comment")
+//    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     public Comment(CommentRequestDto requestDto, Review review, User user) {
         this.content = requestDto.getContent();
