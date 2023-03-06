@@ -12,9 +12,6 @@ public class CommentRequestDto {
     @Schema(type = "integer")
     private Long reviewId;
 
-    // TODO: likeCount를 Request로 받을 필요는 없음
-    private Long likeCount;
-
     @Schema(type = "string", example = "댓글")
     private String content;
 

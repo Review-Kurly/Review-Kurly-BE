@@ -27,7 +27,8 @@ public class Comment extends Timestamped {
     private boolean isDeleted = false;
 
     // TODO: likeCount가 아닌, @OneToMany 필드가 필요함
-    private Long likeCount;
+    @OneToMany(mappedBy = "comment")
+    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     @ManyToOne
     private Review review;
