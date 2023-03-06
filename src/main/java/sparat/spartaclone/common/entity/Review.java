@@ -42,7 +42,7 @@ public class Review extends Timestamped {
     @Column(nullable = false)
     private String content; // 내용
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 1500)
     private String description;
 
     @Column(nullable = false)
