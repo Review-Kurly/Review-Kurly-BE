@@ -28,7 +28,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L;
+    private static final long TOKEN_TIME = 365 * 24 * 60 * 60 * 1000L;  // TODO: 현재는 임시적으로 이렇게 두고, 나중에 refresh token 을 저장할 필요가 있음
 
     @Value("${jwt.secret.key}")
     private String secretKey;
