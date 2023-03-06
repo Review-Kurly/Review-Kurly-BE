@@ -11,8 +11,5 @@ import java.util.Optional;
 public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> {
     Optional<CommentLike> findByUserIdAndCommentId(Long userId, Long commentId);
     void deleteByUserIdAndCommentId(Long userId, Long commentId);
-
-    //쿼리문 수정
-//    @Query(value = "SELECT COUNT(*) FROM CommentLike WHERE comment.id = comment.id")
-//    Long countByCommentId(Long commentId);
+    Long countByCommentId(Long commentId);
 }

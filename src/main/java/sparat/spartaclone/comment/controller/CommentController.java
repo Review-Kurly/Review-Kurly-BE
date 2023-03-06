@@ -14,6 +14,7 @@ import sparat.spartaclone.comment.service.CommentService;
 import sparat.spartaclone.common.ApiResponse;
 import sparat.spartaclone.common.constant.ConstantTable;
 import sparat.spartaclone.common.entity.Comment;
+import sparat.spartaclone.common.entity.User;
 import sparat.spartaclone.common.security.UserDetailsImpl;
 
 import java.util.List;
@@ -27,8 +28,8 @@ public class CommentController {
 
     @GetMapping("/")
     @Operation(summary = "댓글 리스트", description = "댓글 리스트")
-    public ApiResponse<List<CommentResponseDto>> getCommentList(@RequestParam Long reviewId) {
-        return ApiResponse.successOf(HttpStatus.OK, commentService.getCommentList(reviewId));
+    public ApiResponse<List<CommentResponseDto>> getCommentList(@RequestParam Long reviewId, @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ApiResponse.successOf(HttpStatus.OK, commentService.getCommentList(reviewId, userDetails.getUser().getUsername()));
     }
 
     @PostMapping("/{reviewId}")

@@ -18,6 +18,7 @@ import sparat.spartaclone.review.repository.ReviewRepository;
 import sparat.spartaclone.user.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +30,23 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CommentLikeRepository commentLikeRepository;
 
-    //댓글 리스트 불러오는거 ㅜㅅ정
     @Transactional
-    public List<CommentResponseDto> getCommentList(Long reviewId) {
-        List<CommentResponseDto> commentList = commentRepository.findAllByReviewId(reviewId);
+    public List<CommentResponseDto> getCommentList(Long reviewId, String username) {
+        List<Comment> commentList = commentRepository.findAllByReviewId(reviewId);
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
-        return commentList;
+        Optional<User> user = userRepository.findByUsername(username);
+
+        for (Comment comment: commentList) {
+            if (user.isPresent()) {
+                Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.get().getId(), comment.getId());
+                commentResponseDtoList.add(new CommentResponseDto(comment, commentLike.isPresent(), commentLikeRepository.countByCommentId(comment.getId())));
+            } else {
+                commentResponseDtoList.add(new CommentResponseDto(comment, false, commentLikeRepository.countByCommentId(comment.getId())));
+            }
+        }
+
+        return commentResponseDtoList;
     }
 
     @Transactional
@@ -64,7 +76,7 @@ public class CommentService {
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), commentId);
 
         comment.updateComment(commentId, requestDto.getContent());
-        return new CommentResponseDto(comment, commentLike.isPresent());
+        return new CommentResponseDto(comment, commentLike.isPresent(), commentLikeRepository.countByCommentId(commentId));
     }
 
     @Transactional
@@ -93,10 +105,10 @@ public class CommentService {
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
 
         if(commentLike.isEmpty()) {
-            commentLikeRepository.saveAndFlush(new CommentLike(comment, user));
+            commentLikeRepository.save(new CommentLike(comment, user));
         } else {
             commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), comment.getId());
         }
-        return new CommentResponseDto(comment, !commentLike.isPresent());
+        return new CommentResponseDto(comment, !commentLike.isPresent(), commentLikeRepository.countByCommentId(commentId));
     }
 }

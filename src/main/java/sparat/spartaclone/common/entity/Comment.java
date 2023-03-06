@@ -26,14 +26,13 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    private Long likeCount;
+
     @ManyToOne
     private Review review;
 
     @ManyToOne
     private User user;
-
-//    @OneToMany(mappedBy = "comment")
-//    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     public Comment(CommentRequestDto requestDto, Review review, User user) {
         this.content = requestDto.getContent();

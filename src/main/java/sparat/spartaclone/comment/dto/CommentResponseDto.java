@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sparat.spartaclone.common.entity.Comment;
+import sparat.spartaclone.common.entity.CommentLike;
 
 import java.time.LocalDateTime;
 
@@ -23,22 +24,21 @@ public class CommentResponseDto {
 
     private boolean liked = false;
 
-//    public CommentResponseDto(Comment comment) {
-//        this.id = comment.getId();
-//        this.nickname = comment.getUser().getNickname();
-//        this.content = comment.getContent();
-//        this.createAt = comment.getCreatedAt();
-//    }
-
     public CommentResponseDto(Comment comment, boolean liked) {
         this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
         this.liked = liked;
+        this.likeCount = comment.getLikeCount();
     }
 
-//    public static CommentResponseDto of(Comment comment) {
-//        return new CommentResponseDto((comment));
-//    }
+    public CommentResponseDto(Comment comment, boolean liked, Long likeCount) {
+        this.id = comment.getId();
+        this.nickname = comment.getUser().getNickname();
+        this.content = comment.getContent();
+        this.createAt = comment.getCreatedAt();
+        this.liked = liked;
+        this.likeCount = likeCount;
+    }
 }

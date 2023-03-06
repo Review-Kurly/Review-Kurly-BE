@@ -12,6 +12,8 @@ public class CommentRequestDto {
     @Schema(type = "integer")
     private Long reviewId;
 
+    private Long likeCount;
+
     @Schema(type = "string", example = "댓글")
     private String content;
 
