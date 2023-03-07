@@ -40,6 +40,9 @@ public class ReviewsDetailsResponseDto {
     @Schema(type = "boolean", example = "true")
     private boolean owned = false;
 
+    @Schema(type = "integer", example = "10")
+    private Integer commentCount;
+
 
     public ReviewsDetailsResponseDto(Review review, boolean liked, boolean owned) {
         this.id = review.getId();
@@ -52,5 +55,6 @@ public class ReviewsDetailsResponseDto {
         this.description = review.getDescription();
         this.liked =  liked;
         this.owned = owned;
+        this.commentCount = review.getCommentList().size();
     }
 }
