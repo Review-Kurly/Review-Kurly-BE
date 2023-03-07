@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentResponseDto {
     private Long id;
+
     @Schema(type = "string", example = "닉네임")
     private String nickname;
 
@@ -26,7 +27,8 @@ public class CommentResponseDto {
     
     public CommentResponseDto(Comment comment, boolean liked) {
         this.id = comment.getId();
-        this.nickname = comment.getUser().getNickname();
+        String pureNickname = comment.getUser().getNickname();
+        this.nickname = pureNickname.substring(0, 2) + pureNickname.substring(2).replaceAll(".", "*");;
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
         this.liked = liked;

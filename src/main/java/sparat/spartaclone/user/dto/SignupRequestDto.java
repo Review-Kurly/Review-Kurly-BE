@@ -18,7 +18,7 @@ public class SignupRequestDto {
     @Schema(example = "username", description = "/^(?=.*?[0-9])(?=.*?[a-z]).{6,16}$/")
     private String username;
 
-    @Pattern(regexp = "^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,10}$")
+    @Pattern(regexp = "^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{3,10}$")
     @Schema(example = "nickname", description = "/^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,10}$/")
     private String nickname;
 
