@@ -26,9 +26,9 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/")
+    @GetMapping("/{reviewId}")
     @Operation(summary = "댓글 리스트", description = "댓글 리스트")
-    public ApiResponse<List<CommentResponseDto>> getCommentList(@RequestParam Long reviewId, @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<List<CommentResponseDto>> getCommentList(@PathVariable Long reviewId, @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ApiResponse.successOf(HttpStatus.OK, commentService.getCommentList(reviewId, userDetails.getUser().getUsername()));
     }
 
@@ -61,10 +61,11 @@ public class CommentController {
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
 
-    @PostMapping("/likes/{commentId}")
+    @PostMapping("/likes/{reviewId}/{commentId}")
     @Operation(summary = "댓글 좋아요", description = "댓글 좋아요")
-    public ApiResponse<CommentResponseDto> toggleLikes(@PathVariable Long commentId,
+    public ApiResponse<CommentResponseDto> toggleLikes(@PathVariable Long reviewId,
+                                                       @PathVariable Long commentId,
                                                        @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ApiResponse.successOf(HttpStatus.OK, commentService.toggleLikes(commentId, userDetails.getUser().getUsername()));
+        return ApiResponse.successOf(HttpStatus.OK, commentService.toggleLikes(reviewId, commentId, userDetails.getUser().getUsername()));
     }
 }
