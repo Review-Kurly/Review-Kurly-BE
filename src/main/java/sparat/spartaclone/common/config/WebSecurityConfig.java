@@ -49,7 +49,6 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**")
-                .requestMatchers(PathRequest.toH2Console()) // h2-console 사용 및 resources 접근 허용 설정
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -86,14 +85,13 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         // TODO: 배포시, 아래 코드 수정 절대적으로 할 것
         ArrayList<String> allowedOriginList = new ArrayList<>();
         for (int port = 3000; port <= 3010; ++port) {
-            allowedOriginList.add("http://localhost:"+ Integer.toString(port));
+            allowedOriginList.add("http://localhost:"+ port);
         }
         allowedOriginList.add("sparta.chit-chat.shop");
-        String[] allowedOriginsArray = new String[allowedOriginList.size()];
-        allowedOriginsArray = allowedOriginList.toArray(allowedOriginsArray);
+
         registry
                 .addMapping("/**") // 프로그램에서 제공하는 URL
-                .allowedOrigins(allowedOriginsArray) // 요청을 허용할 출처를 명시, 전체 허용 (가능하다면 목록을 작성한다.
+                .allowedOrigins(allowedOriginList.toArray(new String[0])) // 요청을 허용할 출처를 명시, 전체 허용 (가능하다면 목록을 작성한다.
                 .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE") // 어떤 메서드를 허용할 것인지 (GET, POST...)
                 .allowedHeaders("Content-Type", "Authorization") // 어떤 헤더들을 허용할 것인지
                 .exposedHeaders("Content-Type", "Authorization")
