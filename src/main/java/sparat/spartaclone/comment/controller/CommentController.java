@@ -61,10 +61,11 @@ public class CommentController {
         return ApiResponse.successOf(HttpStatus.OK, null);
     }
 
-    @PostMapping("/likes/{commentId}")
+    @PostMapping("/likes/{reviewId}/{commentId}")
     @Operation(summary = "댓글 좋아요", description = "댓글 좋아요")
-    public ApiResponse<CommentResponseDto> toggleLikes(@PathVariable Long commentId,
+    public ApiResponse<CommentResponseDto> toggleLikes(@PathVariable Long reviewId,
+                                                       @PathVariable Long commentId,
                                                        @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ApiResponse.successOf(HttpStatus.OK, commentService.toggleLikes(commentId, userDetails.getUser().getUsername()));
+        return ApiResponse.successOf(HttpStatus.OK, commentService.toggleLikes(reviewId, commentId, userDetails.getUser().getUsername()));
     }
 }

@@ -2,7 +2,7 @@ package sparat.spartaclone.common.enums;
 
 public enum ErrorMessage {
     USER_NOT_FOUND("해당 사용자가 존재하지 않습니다."),
-    BOARD_NOT_FOUND("해당 게시글이 존재하지 않습니다."),
+    REVIEW_NOT_FOUND("해당 리뷰글이 존재하지 않습니다."),
     COMMENT_NOT_FOUND("해당 댓글이 존재하지 않습니다."),
     REPLY_NOT_FOUND("해당 대댓글이 존재하지 않습니다."),
 

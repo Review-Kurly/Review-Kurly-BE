@@ -18,9 +18,7 @@ import sparat.spartaclone.review.repository.ReviewRepository;
 import sparat.spartaclone.user.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,26 +30,31 @@ public class CommentService {
 
     @Transactional
     public List<CommentResponseDto> getCommentList(Long reviewId, String username) {
-        List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtAsc(reviewId);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         Optional<User> user = userRepository.findByUsername(username);
 
-        for (Comment comment: commentList) {
-            if (user.isPresent()) {
-                Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.get().getId(), comment.getId());
-                commentResponseDtoList.add(new CommentResponseDto(comment, commentLike.isPresent()));
-            } else {
-                commentResponseDtoList.add(new CommentResponseDto(comment, false));
+        Set<Comment> myLikedCommentSet = new HashSet<Comment>();
+        if (user.isPresent()) {
+            List<CommentLike> commentLikeList = commentLikeRepository.findByUserIdAndReviewId(user.get().getId(), reviewId);
+            for (CommentLike commentLike : commentLikeList) {
+                myLikedCommentSet.add(commentLike.getComment());
+                System.out.println(commentLike.getComment().getId());
             }
         }
+
+        List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtAsc(reviewId);
+        for (Comment comment : commentList) {
+            commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment)));
+        }
+
         return commentResponseDtoList;
     }
 
     @Transactional
     public CommentResponseDto createComment(Long reviewId, CommentRequestDto requestDto, String username) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessage.BOARD_NOT_FOUND.getMessage())
+                () -> new EntityNotFoundException(ErrorMessage.REVIEW_NOT_FOUND.getMessage())
         );
 
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -92,7 +95,11 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto toggleLikes(Long commentId, String username) {
+    public CommentResponseDto toggleLikes(Long reviewId, Long commentId, String username) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessage.REVIEW_NOT_FOUND.getMessage())
+        );
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new EntityNotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMessage())
         );
@@ -104,7 +111,7 @@ public class CommentService {
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
 
         if(commentLike.isEmpty()) {
-            commentLikeRepository.save(new CommentLike(comment, user));
+            commentLikeRepository.save(new CommentLike(comment, user, review));
         } else {
             commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), comment.getId());
         }

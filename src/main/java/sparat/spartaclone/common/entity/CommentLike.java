@@ -17,9 +17,13 @@ public class CommentLike extends Timestamped {
     private Comment comment;
 
     @ManyToOne
+    private Review review;
+
+    @ManyToOne
     private User user;
 
-    public CommentLike(Comment comment, User user) {
+    public CommentLike(Comment comment, User user, Review review) {
+        this.review = review;
         this.comment = comment;
         this.user = user;
     }

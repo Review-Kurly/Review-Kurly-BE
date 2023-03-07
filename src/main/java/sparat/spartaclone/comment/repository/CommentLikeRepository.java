@@ -12,5 +12,10 @@ import java.util.Optional;
 public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> {
     @EntityGraph(attributePaths = {"comment"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<CommentLike> findByUserIdAndCommentId(Long userId, Long commentId);
+
+    @EntityGraph(attributePaths = {"comment"}, type = EntityGraph.EntityGraphType.FETCH)
+    List<CommentLike> findByUserIdAndReviewId(Long userId, Long reviewId);
+
+
     void deleteByUserIdAndCommentId(Long userId, Long commentId);
 }
