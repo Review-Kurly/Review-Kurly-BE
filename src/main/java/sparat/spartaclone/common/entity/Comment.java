@@ -8,7 +8,9 @@ import sparat.spartaclone.comment.dto.CommentRequestDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "Comment")
 @Getter
@@ -19,6 +21,9 @@ public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String commentTitle;
 
     @Column(nullable = false)
     private String content;
@@ -36,13 +41,15 @@ public class Comment extends Timestamped {
     private User user;
 
     public Comment(CommentRequestDto requestDto, Review review, User user) {
+        this.commentTitle = requestDto.getCommentTitle();
         this.content = requestDto.getContent();
         this.review = review;
         this.user = user;
     }
 
-    public void updateComment(Long id, String content) {
+    public void updateComment(Long id,String commentTitle, String content) {
         this.id = id;
+        this.commentTitle = commentTitle;
         this.content = content;
     }
 }

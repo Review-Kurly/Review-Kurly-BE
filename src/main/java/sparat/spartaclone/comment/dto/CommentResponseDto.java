@@ -15,6 +15,9 @@ public class CommentResponseDto {
     @Schema(type = "string", example = "닉네임")
     private String nickname;
 
+    @Schema(type = "string", example = "제목")
+    private String commentTitle;
+
     @Schema(type = "string", example = "댓글")
     private String content;
 
@@ -27,6 +30,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment comment, boolean liked) {
         this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
+        this.commentTitle = comment.getCommentTitle();
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
         this.liked = liked;

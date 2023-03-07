@@ -77,7 +77,7 @@ public class CommentService {
 
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), commentId);
 
-        comment.updateComment(commentId, requestDto.getContent());
+        comment.updateComment(commentId, requestDto.getCommentTitle(), requestDto.getContent());
         return new CommentResponseDto(comment, commentLike.isPresent());
     }
 
