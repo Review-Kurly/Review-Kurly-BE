@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface MainPageRepository extends JpaRepository<Review, Long> {
-    String BEST_SEARCH = "SELECT r.id, r.title, r.image_url,r.price, COUNT(c.review_id) AS comment_count " +
+    String BEST_SEARCH = "SELECT r.id, r.title, r.image_Url,r.price, COUNT(c.review_id) AS comment_count " +
             "FROM Review r " +
             "LEFT JOIN comment c ON c.review_id = r.id and c.is_deleted = false " +
             "WHERE (select count(*) from comment where r.id = review_id AND is_deleted = false) AND r.is_deleted = FALSE " +
@@ -45,7 +45,7 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
 //    List<Review> findAllByOrderByLikeCount(String keyword);
 
 
-    @Query(value = "SELECT r.id, r.title, r.image_url,r.price, COUNT(c.review_id) AS comment_count " +
+    @Query(value = "SELECT r.id, r.title, r.image_Url,r.price, COUNT(c.review_id) AS comment_count " +
             "FROM Review r " +
             "LEFT JOIN comment c ON c.review_id = r.id and c.is_deleted = false " +
             "WHERE r.is_deleted = FALSE " +
