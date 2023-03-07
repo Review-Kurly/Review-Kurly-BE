@@ -11,11 +11,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "Review")
+@Entity(name = "review")
 @Getter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE Review SET IS_DELETED = true WHERE id=?")
-@Where(clause = "IS_DELETED=false")
+@SQLDelete(sql = "UPDATE review SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 public class Review extends Timestamped {
 
     @Id

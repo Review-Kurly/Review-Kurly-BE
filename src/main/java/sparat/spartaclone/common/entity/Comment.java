@@ -12,11 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity(name = "Comment")
+@Entity(name = "comment")
 @Getter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE Comment SET is_Deleted = true WHERE id=?")
-@Where(clause = "is_Deleted=false")
+@SQLDelete(sql = "UPDATE Comment SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
