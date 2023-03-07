@@ -7,7 +7,7 @@ import sparat.spartaclone.common.entity.Review;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
-    @EntityGraph(attributePaths = {"comment"})
+    @EntityGraph(attributePaths = {"commentList"})
     Optional<Review> findById(Long reviewId);
 
     Optional<Review> findByUserIdAndId(Long id, Long id1);
