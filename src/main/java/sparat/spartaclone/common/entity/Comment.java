@@ -23,9 +23,6 @@ public class Comment extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String commentTitle;
-
-    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
@@ -41,15 +38,13 @@ public class Comment extends Timestamped {
     private User user;
 
     public Comment(CommentRequestDto requestDto, Review review, User user) {
-        this.commentTitle = requestDto.getCommentTitle();
         this.content = requestDto.getContent();
         this.review = review;
         this.user = user;
     }
 
-    public void updateComment(Long id,String commentTitle, String content) {
+    public void updateComment(Long id, String content) {
         this.id = id;
-        this.commentTitle = commentTitle;
         this.content = content;
     }
 }
