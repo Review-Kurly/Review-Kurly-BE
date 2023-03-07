@@ -16,9 +16,9 @@ import java.util.List;
 @Repository
 public interface MainPageRepository extends JpaRepository<Review, Long> {
     String BEST_SEARCH = "SELECT r.id, r.title, r.image_url,r.price, COUNT(c.review_id) AS comment_count " +
-            "FROM Review r " +
-            "LEFT JOIN comment c ON c.review_id = r.id and c.is_deleted = false " +
-            "WHERE (select count(*) from comment where r.id = review_id AND is_deleted = false) AND r.is_deleted = FALSE " +
+            "FROM review r " +
+            "LEFT JOIN comment c ON c.review_id = r.id AND c.is_deleted = FALSE " +
+            "WHERE (SELECT COUNT(*) FROM comment WHERE r.id = review_id AND is_deleted = false) AND r.is_deleted = FALSE " +
             "GROUP BY r.id ";
 
     @EntityGraph(attributePaths = {"commentList"})
@@ -46,8 +46,8 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
 
 
     @Query(value = "SELECT r.id, r.title, r.image_url,r.price, COUNT(c.review_id) AS comment_count " +
-            "FROM Review r " +
-            "LEFT JOIN comment c ON c.review_id = r.id and c.is_deleted = false " +
+            "FROM review r " +
+            "LEFT JOIN comment c ON c.review_id = r.id AND c.is_deleted = FALSE " +
             "WHERE r.is_deleted = FALSE " +
             "GROUP BY r.id " +
             "ORDER BY RAND() " +
