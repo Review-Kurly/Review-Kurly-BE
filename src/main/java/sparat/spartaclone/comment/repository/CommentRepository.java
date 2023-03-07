@@ -12,5 +12,5 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @EntityGraph(attributePaths = {"user", "commentLikeList"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Comment> findAllByReviewIdOrderByCreatedAtAsc(Long reviewId);
+    List<Comment> findAllByReviewIdOrderByCreatedAtDesc(Long reviewId);
 }

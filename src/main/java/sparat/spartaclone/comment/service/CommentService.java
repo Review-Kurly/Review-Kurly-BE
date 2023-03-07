@@ -43,7 +43,7 @@ public class CommentService {
             }
         }
 
-        List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtAsc(reviewId);
+        List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtDesc(reviewId);
         for (Comment comment : commentList) {
             commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment)));
         }
