@@ -32,7 +32,7 @@ public class CommentService {
 
     @Transactional
     public List<CommentResponseDto> getCommentList(Long reviewId, String username) {
-        List<Comment> commentList = commentRepository.findAllByReviewId(reviewId);
+        List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtAsc(reviewId);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         Optional<User> user = userRepository.findByUsername(username);
@@ -45,7 +45,6 @@ public class CommentService {
                 commentResponseDtoList.add(new CommentResponseDto(comment, false));
             }
         }
-
         return commentResponseDtoList;
     }
 
