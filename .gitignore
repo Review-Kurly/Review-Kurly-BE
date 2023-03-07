@@ -40,4 +40,4 @@ out/
 /data
 
 ### secret values ###
-application-dev.properties
+**/application-dev.properties

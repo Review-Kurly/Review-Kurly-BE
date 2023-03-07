@@ -51,8 +51,6 @@ dependencies {
     // AWS s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-
-
     // 개발자용
     runtimeOnly 'com.h2database:h2'
 
