@@ -22,7 +22,7 @@ import java.util.List;
 public class MainPageController {
     private final MainPageService mainPageService;
     @GetMapping("/reviews/")
-    @Operation(summary = "메인 페이지", description = "8개 랜덤으로 가져오기")
+    @Operation(summary = "메인 페이지", description = "20개 랜덤으로 가져오기")
     public ApiResponse<List<MainPageResponseDto>> getRandomList(
     ) {
 
@@ -63,7 +63,7 @@ public class MainPageController {
     }
 
     @GetMapping("/reviews/best-reviews")
-    @Operation(summary = "베스트", description = "best는 댓글 1개 이상일때 나오고 sort에는 cheap / expensive 가 들어갑니다. 없으면 댓글순으로 정렬됩니다.")
+    @Operation(summary = "베스트", description = "best는 댓글 5개 이상일때 나오고 sort에는 cheap / expensive 가 들어갑니다. 없으면 댓글순으로 정렬됩니다.")
     public ApiResponse<List<MainPageResponseDto>> getBestList(
                                                             @RequestParam(value = "sort", required = false) SortType sortType,
                                                           @RequestParam(value = "page", required = false) String page,

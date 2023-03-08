@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class MainPageService {
-    final long BEST_NEED_COMMENT_COUNT = 1L;
+    final long BEST_NEED_COMMENT_COUNT = 5L;
     private final MainPageRepository mainPageRepository;
 
     @Transactional
