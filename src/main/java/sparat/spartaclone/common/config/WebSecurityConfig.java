@@ -92,6 +92,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         }
         allowedOriginList.add("http://review-kurly.s3-website.ap-northeast-2.amazonaws.com");
         allowedOriginList.add("https://reviewkurly.vercel.app/");
+        allowedOriginList.add("https://sparta99.shop/");
 
         registry
                 .addMapping("/**") // 프로그램에서 제공하는 URL
