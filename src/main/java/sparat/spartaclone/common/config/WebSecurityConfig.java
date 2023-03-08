@@ -6,6 +6,7 @@ package sparat.spartaclone.common.config;
 //import com.sparta.posting.security.CustomAccessDeniedHandler;
 //import com.sparta.posting.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.protocol.HTTP;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,6 +62,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers(HttpMethod.GET, "/api/health-check").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/reviews-details/**").permitAll()

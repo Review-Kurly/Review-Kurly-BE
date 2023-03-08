@@ -15,7 +15,7 @@ import sparat.spartaclone.common.ApiResponse;
 @RequiredArgsConstructor
 @RequestMapping("/api/health-check")
 public class HealthCheckController {
-    @GetMapping("/")
+    @GetMapping()
     @Operation(summary = "현재 instance가 제대로 동작하는 확인", description = "aws ec2 서비스를 위해 만듦")
     public ApiResponse<String> healthCheck() {
         return ApiResponse.successOf(HttpStatus.OK, "up");
