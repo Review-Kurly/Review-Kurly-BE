@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity(name = "comment")
 @Getter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE Comment SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted=false")
 public class Comment extends Timestamped {
     @Id
