@@ -88,7 +88,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         for (int port = 3000; port <= 3010; ++port) {
             allowedOriginList.add("http://localhost:"+ port);
         }
-        allowedOriginList.add("sparta.chit-chat.shop");
+        allowedOriginList.add("http://review-kurly.s3-website.ap-northeast-2.amazonaws.com");
 
         registry
                 .addMapping("/**") // 프로그램에서 제공하는 URL
