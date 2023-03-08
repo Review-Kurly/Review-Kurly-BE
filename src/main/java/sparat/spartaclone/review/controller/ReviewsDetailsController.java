@@ -32,7 +32,7 @@ public class ReviewsDetailsController {
                                                                @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails){
 
 //        reviewService.createReview(requestDto,userDetails.getUser());
-        return ApiResponse.successOf(HttpStatus.CREATED, reviewsDetailsService.createReview(requestDto,userDetails.getUser()));
+        return ApiResponse.successOf(HttpStatus.CREATED, reviewsDetailsService.createReview(requestDto,userDetails.getUsername()));
     }
 
     @GetMapping("/{reviewId}")

@@ -29,7 +29,12 @@ public class ReviewsDetailsService {
     private final ReviewLikeRepository reviewLikeRepository;
 
     @Transactional
-    public ReviewsDetailsResponseDto createReview(ReviewsDetailsRequestDto requestDto, User user) {
+    public ReviewsDetailsResponseDto createReview(ReviewsDetailsRequestDto requestDto, String username) {
+
+        // 유저인식
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getMessage())
+        );
 
         try {
             //이미지 등록하기
