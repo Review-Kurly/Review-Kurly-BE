@@ -18,6 +18,8 @@ import sparat.spartaclone.review.service.ReviewService;
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 
+// TODO: userDetails == null ? null : userDetails.getUsername() 방식으로 처리하는 것보다 더 좋은 방식 알아보기
+
 @Tag(name = "Review")
 @RestController
 @RequestMapping("/api/reviews-details")
@@ -37,7 +39,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 상세페이지 조회", description = "리뷰 상세페이지 댓글 목록까지 조회 ")
     public ApiResponse<ReviewsDetailsResponseDto> getReview(@PathVariable Long reviewId,
                                                             @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
-        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId, userDetails.getUsername()));
+        return ApiResponse.successOf(HttpStatus.CREATED,reviewService.getReview(reviewId, userDetails == null ? null : userDetails.getUsername()));
     }
 
     @PutMapping(value ="/{reviewId}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
