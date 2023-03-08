@@ -11,6 +11,9 @@ public class ReviewsDetailsResponseDto {
 
     private Long id;
 
+    @Schema(example = "작성가 닉네임")
+    private String authorNickname;
+
     @Schema(example = "https://www.kurly.com/goods/5000676")
     private String imageUrl; // 이미지 등록
 
@@ -46,6 +49,7 @@ public class ReviewsDetailsResponseDto {
 
     public ReviewsDetailsResponseDto(Review review, boolean liked, boolean owned) {
         this.id = review.getId();
+        this.authorNickname = review.getUser().getNickname();
         this.imageUrl = review.getImageUrl();
         this.title = review.getTitle();
         this.price = review.getPrice();
