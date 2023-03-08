@@ -77,6 +77,10 @@ public class CommentService {
 
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), commentId);
 
+        if (!user.getId().equals(comment.getUser().getId())) {
+            throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
+        }
+
         comment.updateComment(commentId, requestDto.getContent());
         return new CommentResponseDto(comment, commentLike.isPresent());
     }
@@ -88,8 +92,12 @@ public class CommentService {
         );
 
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessage.WRONG_USERNAME.getMessage())
+                () -> new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage())
         );
+
+        if (!user.getId().equals(comment.getUser().getId())) {
+            throw new EntityNotFoundException("유저가 일치하지 않습니다.");
+        }
 
         commentRepository.deleteById(commentId);
     }
