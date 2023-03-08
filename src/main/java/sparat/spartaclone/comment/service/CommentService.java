@@ -46,7 +46,7 @@ public class CommentService {
         List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtDesc(reviewId);
         for (Comment comment : commentList) {
             if(comment.getUser().getUsername().equals(username)) {
-                commentResponseDtoList.add((new CommentResponseDto(comment, myLikedCommentSet.contains(comment), true)));
+                commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment), true));
             } else {
                 commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment), false));
             }

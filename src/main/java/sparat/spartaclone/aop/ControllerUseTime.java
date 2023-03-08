@@ -7,6 +7,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Component
@@ -14,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class ControllerUseTime {
     private static final Logger log = LoggerFactory.getLogger(ControllerUseTime.class);
 
-    @Around("execution(public * sparat.spartaclone.*.controller..*(..))")
+    @Around(value = "execution(public * sparat.spartaclone.*.controller..*(..))")
     public synchronized Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
         // 측정 시작 시간
         long startTime = System.currentTimeMillis();
@@ -33,7 +37,22 @@ public class ControllerUseTime {
             // 사용된 controller class
             String controllerClassName = joinPoint.getTarget().getClass().getSimpleName();
 
-            log.info("[Controller Used Time] Controller: " + controllerClassName + ", Total Time: " + runTime + " ms");
+            // 호출된 메소드
+            String methodName = joinPoint.getSignature().getName();
+
+            String requestUri = getRequestUrl();
+
+            log.info("[API used time] Request URI: {}, Controller: {}, Method: {}, Total Time: {} ms",
+                    requestUri, controllerClassName, methodName, runTime);
         }
+    }
+
+    private String getRequestUrl() {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            return request.getRequestURI();
+        }
+        return null;
     }
 }
