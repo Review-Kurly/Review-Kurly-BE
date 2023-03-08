@@ -45,9 +45,12 @@ public class CommentService {
 
         List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtDesc(reviewId);
         for (Comment comment : commentList) {
-            commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment)));
+            if(comment.getUser().getUsername().equals(username)) {
+                commentResponseDtoList.add((new CommentResponseDto(comment, myLikedCommentSet.contains(comment), true)));
+            } else {
+                commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment), false));
+            }
         }
-
         return commentResponseDtoList;
     }
 
@@ -62,7 +65,7 @@ public class CommentService {
         );
 
         Comment comment = commentRepository.save(new Comment(requestDto, review, user));
-        return new CommentResponseDto(comment, false);
+        return new CommentResponseDto(comment, false, true);
     }
 
     @Transactional
@@ -82,7 +85,7 @@ public class CommentService {
         }
 
         comment.updateComment(commentId, requestDto.getContent());
-        return new CommentResponseDto(comment, commentLike.isPresent());
+        return new CommentResponseDto(comment, commentLike.isPresent(), true);
     }
 
     @Transactional
@@ -123,6 +126,6 @@ public class CommentService {
         } else {
             commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), comment.getId());
         }
-        return new CommentResponseDto(comment, !commentLike.isPresent());
+        return new CommentResponseDto(comment, !commentLike.isPresent(), user.getId().equals(comment.getUser().getId()));
     }
 }

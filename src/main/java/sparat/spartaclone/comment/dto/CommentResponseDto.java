@@ -24,8 +24,10 @@ public class CommentResponseDto {
     private Long likeCount;
 
     private boolean liked = false;
-    
-    public CommentResponseDto(Comment comment, boolean liked) {
+
+    private boolean owned = false;
+
+    public CommentResponseDto(Comment comment, boolean liked, boolean owned) {
         this.id = comment.getId();
         String pureNickname = comment.getUser().getNickname();
         this.nickname = pureNickname.substring(0, 2) + pureNickname.substring(2).replaceAll(".", "*");;
@@ -33,5 +35,6 @@ public class CommentResponseDto {
         this.createAt = comment.getCreatedAt();
         this.liked = liked;
         this.likeCount = (long) comment.getCommentLikeList().size();
+        this.owned = owned;
     }
 }
