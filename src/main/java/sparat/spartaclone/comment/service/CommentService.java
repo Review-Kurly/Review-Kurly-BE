@@ -45,11 +45,10 @@ public class CommentService {
 
         List<Comment> commentList = commentRepository.findAllByReviewIdOrderByCreatedAtDesc(reviewId);
         for (Comment comment : commentList) {
-            if(comment.getUser().getUsername().equals(username)) {
-                commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment), true));
-            } else {
-                commentResponseDtoList.add(new CommentResponseDto(comment, myLikedCommentSet.contains(comment), false));
-            }
+            boolean isLiked = myLikedCommentSet.contains(comment);
+            boolean isOwned = comment.getUser().getUsername().equals(username);
+            long likeCount = comment.getCommentLikeList().size();
+            commentResponseDtoList.add(new CommentResponseDto(comment, isLiked, isOwned, likeCount));
         }
         return commentResponseDtoList;
     }
@@ -65,7 +64,7 @@ public class CommentService {
         );
 
         Comment comment = commentRepository.save(new Comment(requestDto, review, user));
-        return new CommentResponseDto(comment, false, true);
+        return new CommentResponseDto(comment, false, true, 0);
     }
 
     @Transactional
@@ -84,8 +83,11 @@ public class CommentService {
             throw new EntityNotFoundException(ErrorMessage.ACCESS_DENIED.getMessage());
         }
 
+        boolean isLiked = commentLike.isPresent();
+        boolean isOwned = user.getId().equals(comment.getUser().getId());
+        long likeCount = comment.getCommentLikeList().size();
         comment.updateComment(commentId, requestDto.getContent());
-        return new CommentResponseDto(comment, commentLike.isPresent(), true);
+        return new CommentResponseDto(comment, isLiked, isOwned, likeCount);
     }
 
     @Transactional
@@ -121,11 +123,14 @@ public class CommentService {
 
         Optional<CommentLike> commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
 
-        if(commentLike.isEmpty()) {
+        boolean isLiked = !commentLike.isPresent();
+        boolean isOwned = user.getId().equals(comment.getUser().getId());
+        long likeCount = comment.getCommentLikeList().size() + (isLiked ? 1 : -1);
+        if (commentLike.isEmpty()) {
             commentLikeRepository.save(new CommentLike(comment, user, review));
         } else {
             commentLikeRepository.deleteByUserIdAndCommentId(user.getId(), comment.getId());
         }
-        return new CommentResponseDto(comment, !commentLike.isPresent(), user.getId().equals(comment.getUser().getId()));
+        return new CommentResponseDto(comment, isLiked, isOwned, likeCount);
     }
 }

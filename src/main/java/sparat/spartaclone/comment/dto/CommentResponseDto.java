@@ -27,14 +27,14 @@ public class CommentResponseDto {
 
     private boolean owned = false;
 
-    public CommentResponseDto(Comment comment, boolean liked, boolean owned) {
+    public CommentResponseDto(Comment comment, boolean liked, boolean owned, long likeCount) {
         this.id = comment.getId();
         String pureNickname = comment.getUser().getNickname();
         this.nickname = pureNickname.substring(0, 2) + pureNickname.substring(2).replaceAll(".", "*");;
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
         this.liked = liked;
-        this.likeCount = (long) comment.getCommentLikeList().size();
+        this.likeCount = likeCount;
         this.owned = owned;
     }
 }
