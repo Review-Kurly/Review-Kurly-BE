@@ -29,7 +29,10 @@ public class ReviewService {
     private final ReviewLikeRepository reviewLikeRepository;
 
     @Transactional
-    public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, User user) {
+    public ReviewsDetailsResponseDto createReview(ReviewRequestDto requestDto, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getMessage())
+        );
 
         try {
             //이미지 등록하기
@@ -46,6 +49,7 @@ public class ReviewService {
                     .user(user)
                     .liked(false)
                     .build();
+
             review = reviewRepository.save(review);
             return new ReviewsDetailsResponseDto(review, false, true);
 
@@ -69,7 +73,7 @@ public class ReviewService {
             );
             Optional<ReviewLike> reviewLike = reviewLikeRepository.findByUserIdAndReviewId(user.getId(), reviewId);
             isLiked = reviewLike.isPresent();
-            isOwned = checkOwned(reviewId, username);
+            isOwned = review.getUser().equals(user);
         }
 
         return new ReviewsDetailsResponseDto(review, isLiked, isOwned);
@@ -95,7 +99,7 @@ public class ReviewService {
             }
 
             review.updateReview(requestDto, uploadImage);
-            return new ReviewsDetailsResponseDto(review, false, checkOwned(reviewId, username));
+            return new ReviewsDetailsResponseDto(review, false, review.getUser().equals(user));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -129,7 +133,7 @@ public class ReviewService {
         } else {
             reviewLikeRepository.deleteByUserIdAndReviewId(user.getId(), reviewId);
         }
-        return new ReviewsDetailsResponseDto(review, !reviewLike.isPresent(), checkOwned(reviewId, username));
+        return new ReviewsDetailsResponseDto(review, !reviewLike.isPresent(), review.getUser().equals(user));
     }
 
     @Transactional
