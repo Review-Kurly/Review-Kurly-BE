@@ -5,17 +5,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sparat.spartaclone.common.CustomClientException;
 import sparat.spartaclone.common.entity.Review;
+import sparat.spartaclone.common.entity.ReviewLike;
+import sparat.spartaclone.common.entity.User;
+import sparat.spartaclone.common.enums.ErrorMessage;
 import sparat.spartaclone.mainpage.dto.MainPageResponseDto;
 import sparat.spartaclone.mainpage.enums.SortType;
 import sparat.spartaclone.mainpage.repository.MainPageRepository;
+import sparat.spartaclone.review.dto.ReviewsDetailsResponseDto;
+import sparat.spartaclone.review.repository.ReviewLikeRepository;
+import sparat.spartaclone.review.repository.ReviewRepository;
+import sparat.spartaclone.user.repository.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +33,9 @@ import java.util.List;
 public class MainPageService {
     final long BEST_NEED_COMMENT_COUNT = 5L;
     private final MainPageRepository mainPageRepository;
+    private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final ReviewLikeRepository reviewLikeRepository;
 
     @Transactional
     public List<MainPageResponseDto> getKeywordList(String keyword, String page, String size) {
@@ -87,16 +100,16 @@ public class MainPageService {
                 reviewList = mainPageRepository.findAll(Sort.by(Sort.Direction.DESC, "price"));
                 break;
             default:
-                for (Object[] reviewWithCommentCount : mainPageRepository.findAllOrderByCommentCount()) {
+                for (Object[] reviewWithCommentCount : mainPageRepository.findAllByBestSearchOrderByCommentCount()) {
                     MainPageResponseDto mainPageResponseDto = parseReviewList(reviewWithCommentCount);
-                    if(mainPageResponseDto.getCommentCount() >= BEST_NEED_COMMENT_COUNT)
+                    if (mainPageResponseDto.getCommentCount() >= BEST_NEED_COMMENT_COUNT)
                         mainPageResponseDtoList.add(mainPageResponseDto);
                 }
                 return mainPageResponseDtoList;
         }
 
         for (Review reviewWithCommentCount : reviewList) {
-            if(reviewWithCommentCount.getCommentList().size() >= BEST_NEED_COMMENT_COUNT)
+            if (reviewWithCommentCount.getCommentList().size() >= BEST_NEED_COMMENT_COUNT)
                 mainPageResponseDtoList.add(MainPageResponseDto.of(reviewWithCommentCount, (long) reviewWithCommentCount.getCommentList().size()));
         }
 
@@ -174,12 +187,19 @@ public class MainPageService {
     }
 
     @Transactional
-    public MainPageResponseDto getMyList(String username) {
-//        나중에 user만들어지면 해야함
-//        List<Review> reviewList = new ArrayList<>();
-//                reviewList = mainPageRepository.findAllByUserIdOrderByCreatedAtDesc();
+    public List<MainPageResponseDto> getMyLikedList(String username) {
+        List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
+        if (username != null) {
+            User user = userRepository.findByUsername(username).orElseThrow(
+                    () -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getMessage())
+            );
+            List<Object[]> reviewList = mainPageRepository.findAllByLiked(user.getId());
+            for (Object[] reviewWithCommentCount : reviewList) {
+                mainPageResponseDtoList.add(parseReviewList(reviewWithCommentCount));
+            }
+        }
 
-        return new MainPageResponseDto();
+        return mainPageResponseDtoList;
     }
 
     public MainPageResponseDto parseReviewList(Object[] reviewList) {

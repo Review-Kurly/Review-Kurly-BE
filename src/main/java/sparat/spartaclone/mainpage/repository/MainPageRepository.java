@@ -24,7 +24,7 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
     @EntityGraph(attributePaths = {"commentList"})
     List<Review> findAllByTitleContainingOrderByCreatedAtDesc(String title);
 
-    @EntityGraph(attributePaths = {"commentList"})
+    @EntityGraph(attributePaths = {"commentList", "reviewLikeList"})
     List<Review> findAll(Sort sort);
 
     List<Review> findAllByUserIdOrderByCreatedAtDesc(Long userId);
@@ -33,11 +33,16 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Sort sort);
 
     @Query(value = BEST_SEARCH + "ORDER BY comment_count DESC ", nativeQuery = true)
-    List<Object[]> findAllOrderByCommentCount();
+    List<Object[]> findAllByBestSearchOrderByCommentCount();
+
+    @Query(value = "SELECT r.id, r.title, r.image_url, r.price, " +
+            "(SELECT COUNT(*) FROM comment WHERE review_id = r.id AND is_deleted = FALSE) AS comment_count " +
+            "FROM review r " +
+            "WHERE (SELECT COUNT(*) FROM review_like WHERE r.id = review_id AND user_id = :userId) = 1 AND r.is_deleted = FALSE " +
+            "GROUP BY r.id" , nativeQuery = true)
+    List<Object[]> findAllByLiked(Long userId);
 
     // @Query(value = "SELECT *, (select count(*) from comment where Review.ID = review_id) as count FROM REVIEW WHERE (select count(*) from comment where Review.ID = review_id) >= 1 AND IS_DELETED = FALSE ORDER BY PRICE DESC", nativeQuery = true)
-
-
 
 
     //좋아요 갯수 폐기

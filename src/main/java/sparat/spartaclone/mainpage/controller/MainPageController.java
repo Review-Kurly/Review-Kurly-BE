@@ -1,13 +1,16 @@
 package sparat.spartaclone.mainpage.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import sparat.spartaclone.common.ApiResponse;
+import sparat.spartaclone.common.security.UserDetailsImpl;
 import sparat.spartaclone.mainpage.dto.MainPageResponseDto;
 import sparat.spartaclone.mainpage.enums.Category;
 import sparat.spartaclone.mainpage.enums.SortType;
@@ -71,6 +74,13 @@ public class MainPageController {
                                                     ) {
 
         return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getBestList(sortType, page, size));
+    }
+
+    @GetMapping("/reviews/liked-reviews")
+    @Operation(summary = "좋아요 리스트", description = "좋아요한 리스트 목록을 가져옵니다.")
+    public ApiResponse<List<MainPageResponseDto>> getMyLikedList(@Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ApiResponse.successOf(HttpStatus.CREATED, mainPageService.getMyLikedList(userDetails.getUsername()));
     }
 }
 
