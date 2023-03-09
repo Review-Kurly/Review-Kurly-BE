@@ -38,7 +38,7 @@ public class MainPageService {
     private final ReviewLikeRepository reviewLikeRepository;
 
     @Transactional
-    public List<MainPageResponseDto> getKeywordList(String keyword, String page, String size) {
+    public List<MainPageResponseDto> getKeywordList(String keyword) {
         List<Review> reviewList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class MainPageService {
     }
 
     @Transactional
-    public List<MainPageResponseDto> getNewList(SortType sortType, String page, String size) {
+    public List<MainPageResponseDto> getNewList(SortType sortType) {
         List<Review> reviewList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
@@ -86,7 +86,7 @@ public class MainPageService {
     }
 
     @Transactional
-    public List<MainPageResponseDto> getBestList(SortType sortType, String page, String size) {
+    public List<MainPageResponseDto> getBestList(SortType sortType) {
         List<Review> reviewList;
         List<MainPageResponseDto> mainPageResponseDtoList = new ArrayList<>();
         if (sortType == null)
