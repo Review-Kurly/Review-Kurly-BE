@@ -24,7 +24,7 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
     @EntityGraph(attributePaths = {"commentList"})
     List<Review> findAllByTitleContainingOrderByCreatedAtDesc(String title);
 
-    @EntityGraph(attributePaths = {"commentList", "reviewLikeList"})
+    @EntityGraph(attributePaths = {"commentList"})
     List<Review> findAll(Sort sort);
 
     List<Review> findAllByUserIdOrderByCreatedAtDesc(Long userId);
