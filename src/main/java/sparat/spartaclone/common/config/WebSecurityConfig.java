@@ -91,7 +91,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             allowedOriginList.add("http://localhost:"+ port);
         }
         allowedOriginList.add("http://review-kurly.s3-website.ap-northeast-2.amazonaws.com");
-        allowedOriginList.add("https://reviews-kurly.vercel.app/");
+        allowedOriginList.add("https://myreview-kurly.vercel.app/");
         allowedOriginList.add("https://sparta99.shop/");
 
         registry
