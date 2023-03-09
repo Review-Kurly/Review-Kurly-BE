@@ -56,6 +56,6 @@ public interface MainPageRepository extends JpaRepository<Review, Long> {
             "WHERE r.is_deleted = FALSE " +
             "GROUP BY r.id " +
             "ORDER BY RAND() " +
-            "LIMIT 20 ", nativeQuery = true)
+            "LIMIT 24 ", nativeQuery = true)
     List<Object[]> findRandomWithCommentCount();
 }
